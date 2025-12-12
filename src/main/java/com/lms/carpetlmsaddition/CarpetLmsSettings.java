@@ -14,4 +14,7 @@ public class CarpetLmsSettings {
       categories = {LMS, SURVIVAL},
       validators = DropAllRuleValidator.class)
   public static boolean fakePlayerDropAll = false;
+
+  @Rule(categories = {LMS, SURVIVAL})
+  public static boolean fragileVaults = false;
 }
