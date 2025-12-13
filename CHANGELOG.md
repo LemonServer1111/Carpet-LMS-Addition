@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.2
+
+- Set icon.
+- Reorganize every code.
+
 ## 1.2.1
 
 - Fix typos in Chinese docs: From `阅灵` to `悦灵`
