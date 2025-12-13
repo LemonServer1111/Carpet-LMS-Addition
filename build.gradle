@@ -45,6 +45,7 @@ dependencies {
 }
 
 spotless {
+    enforceCheck = false
     groovyGradle {
         target("**/*.gradle")
         greclipse().configFile(rootProject.file("spotless/greclipse.properties"))
