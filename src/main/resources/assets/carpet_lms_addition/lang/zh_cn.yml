@@ -11,6 +11,9 @@ carpet:
     fragileVaults:
       name: "脆弱宝库"
       desc: "将宝库的抗爆降低到信标等级。"
+    vaultPickaxeMineable:
+      name: "宝库可用镐挖掘"
+      desc: "允许镐子以工具速度挖掘宝库。"
     fragileTrialSpawners:
       name: "脆弱试炼刷怪笼"
       desc: "降低试炼刷怪笼的抗爆。"

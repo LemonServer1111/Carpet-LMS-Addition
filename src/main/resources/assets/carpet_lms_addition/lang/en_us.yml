@@ -11,6 +11,9 @@ carpet:
     fragileVaults:
       name: "Fragile Vaults"
       desc: "Lower vault blast resistance to beacon level."
+    vaultPickaxeMineable:
+      name: "Pickaxe-Mineable Vaults"
+      desc: "Let pickaxes mine vaults at normal tool speed."
     fragileTrialSpawners:
       name: "Fragile Trial Spawners"
       desc: "Lower trial spawner blast resistance."

@@ -9,10 +9,12 @@ import com.lms.carpetlmsaddition.rules.fragileTrialSpawners.FragileTrialSpawnerR
 import com.lms.carpetlmsaddition.rules.fragileVaults.FragileVaultRuleSettings;
 import com.lms.carpetlmsaddition.rules.pearlIgnoreEntityCollision.PearlRuleSettings;
 import com.lms.carpetlmsaddition.rules.playerCommandDropall.PlayerCommandDropallRuleSettings;
-import java.util.Map;
+import com.lms.carpetlmsaddition.rules.vaultPickaxeMineable.VaultPickaxeMineableRuleSettings;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 public class CarpetLmsAddition implements ModInitializer, CarpetExtension {
   public static final String MOD_ID = "carpet_lms_addition";
@@ -32,6 +34,7 @@ public class CarpetLmsAddition implements ModInitializer, CarpetExtension {
     CarpetServer.settingsManager.parseSettingsClass(PearlRuleSettings.class);
     CarpetServer.settingsManager.parseSettingsClass(AllayHealRuleSettings.class);
     CarpetServer.settingsManager.parseSettingsClass(FragileVaultRuleSettings.class);
+    CarpetServer.settingsManager.parseSettingsClass(VaultPickaxeMineableRuleSettings.class);
     CarpetServer.settingsManager.parseSettingsClass(FragileTrialSpawnerRuleSettings.class);
     CarpetServer.settingsManager.parseSettingsClass(CommandPlaceRuleSettings.class);
     LOGGER.info("Loaded {}", MOD_NAME);

@@ -5,14 +5,15 @@
   "refmap": "carpet_lms_addition.refmap.json",
   "mixins": [
     "allayHealInterval.AllayMixin",
-    "pearlIgnoreEntityCollision.ProjectileUtilMixin",
-    "fakePlayerDropAll.EntityPlayerActionPackActionMixin",
-    "fakePlayerDropAll.DropStackActionTypeMixin",
-    "fakePlayerDropAll.PlayerCommandMixin",
-    "fragileVaults.FragileVaultMixin",
-    "fragileTrialSpawners.FragileTrialSpawnerMixin",
     "commandPlace.PlaceCommandMixin",
-    "commandPlace.PlaceRequirementMutable"
+    "commandPlace.PlaceRequirementMutable",
+    "fakePlayerDropAll.DropStackActionTypeMixin",
+    "fakePlayerDropAll.EntityPlayerActionPackActionMixin",
+    "fakePlayerDropAll.PlayerCommandMixin",
+    "fragileTrialSpawners.FragileTrialSpawnerMixin",
+    "fragileVaults.FragileVaultMixin",
+    "pearlIgnoreEntityCollision.ProjectileUtilMixin",
+    "vaultPickaxeMineable.VaultPickaxeMineableMixin"
   ],
   "injectors": {
     "defaultRequire": 1
