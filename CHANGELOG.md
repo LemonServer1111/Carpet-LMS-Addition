@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3
+
+- Update mod metadata license to GPL v3.
+
 ## 1.2.2
 
 - Set icon.
