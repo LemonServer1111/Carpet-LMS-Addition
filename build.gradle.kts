@@ -10,11 +10,8 @@ plugins {
 version = libs.versions.mod.get()
 group = providers.gradleProperty("maven_group").get()
 
-
-
-
-
 repositories {
+    maven("https://api.modrinth.com/maven")
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -22,14 +19,13 @@ repositories {
     // for more information about repositories.
 }
 
-
-
 dependencies {
     minecraft(libs.minecraft)
     mappings(libs.yarn)
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.kotlin)
+    modImplementation(libs.carpet)
 }
 
 tasks.named<ProcessResources>("processResources") {
@@ -43,8 +39,6 @@ tasks.withType<JavaCompile>().configureEach {
     options.release.set(21)
     options.encoding = "UTF-8"
 }
-
-
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
