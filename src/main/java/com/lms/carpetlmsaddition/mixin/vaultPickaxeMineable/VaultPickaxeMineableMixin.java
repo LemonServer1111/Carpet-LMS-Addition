@@ -14,20 +14,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public abstract class VaultPickaxeMineableMixin {
-    @Shadow
-    public abstract Block getBlock();
+  @Shadow
+  public abstract Block getBlock();
 
-    @Inject(method = "is(Lnet/minecraft/core/HolderSet;)Z", at = @At("HEAD"), cancellable = true)
-    private void lms$letPickaxesMineVaults(
-            HolderSet<Block> holderSet, CallbackInfoReturnable<Boolean> cir) {
-        if (!VaultPickaxeMineableRuleSettings.vaultPickaxeMineable) {
-            return;
-        }
-
-        if (holderSet instanceof HolderSet.Named<Block> named
-                && named.key().equals(BlockTags.MINEABLE_WITH_PICKAXE)
-                && FragileVaultHelper.isVault(this.getBlock())) {
-            cir.setReturnValue(true);
-        }
+  @Inject(method = "is(Lnet/minecraft/core/HolderSet;)Z", at = @At("HEAD"), cancellable = true)
+  private void lms$letPickaxesMineVaults(
+      HolderSet<Block> holderSet, CallbackInfoReturnable<Boolean> cir) {
+    if (!VaultPickaxeMineableRuleSettings.vaultPickaxeMineable) {
+      return;
     }
+
+    if (holderSet instanceof HolderSet.Named<Block> named
+        && named.key().equals(BlockTags.MINEABLE_WITH_PICKAXE)
+        && FragileVaultHelper.isVault(this.getBlock())) {
+      cir.setReturnValue(true);
+    }
+  }
 }
