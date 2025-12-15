@@ -21,12 +21,6 @@
         "adapter": "kotlin"
       }
     ],
-    "fabric-datagen": [
-      {
-        "value": "cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionDataGenerator",
-        "adapter": "kotlin"
-      }
-    ]
   },
   "mixins": [
     "carpet-lms-addition.mixins.json"
