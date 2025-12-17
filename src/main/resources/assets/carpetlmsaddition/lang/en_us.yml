@@ -1,0 +1,5 @@
+carpet:
+  rule:
+    exampleRule:
+      desc: "descTest"
+      name: "nameTest"

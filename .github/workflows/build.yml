@@ -4,7 +4,7 @@
 # against bad commits.
 
 name: build
-on: [ pull_request, push ]
+on: [pull_request, push]
 
 jobs:
   build:
@@ -17,8 +17,8 @@ jobs:
       - name: setup jdk
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'microsoft'
+          java-version: "21"
+          distribution: "microsoft"
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build

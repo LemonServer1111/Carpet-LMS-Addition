@@ -2,38 +2,32 @@
   "schemaVersion": 1,
   "id": "carpet-lms-addition",
   "version": "${version}",
-  "name": "Carpet LMS Addition",
-  "description": "This is an example description! Tell everyone what your mod is about!",
-  "authors": [
-    "Me!"
-  ],
+  "name": "${name}",
+  "description": "${description}",
+  "authors": ["jasonxue"],
   "contact": {
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
-  "license": "CC0-1.0",
-  "icon": "assets/carpet-lms-addition/icon.png",
+  "license": "GPL-3.0-only",
+  "icon": "assets/carpetlmsaddition/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
       {
-        "value": "cn.nm.lms.carpetlmsaddition.CarpetLMSAddition",
+        "value": "cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionMod",
         "adapter": "kotlin"
       }
-    ],
+    ]
   },
-  "mixins": [
-    "carpet-lms-addition.mixins.json"
-  ],
+  "mixins": ["carpet-lms-addition.mixins.json"],
   "depends": {
-    "fabricloader": ">=0.17.3",
+    "fabricloader": ">=0.14.25",
     "minecraft": "~1.21.10",
-    "java": ">=21",
-    "fabric-api": "*",
     "fabric-language-kotlin": "*",
     "carpet": ">=1.4.188"
   },
-  "suggests": {
-    "another-mod": "*"
+  "custom": {
+    "modmenu:parent": "carpet"
   }
 }

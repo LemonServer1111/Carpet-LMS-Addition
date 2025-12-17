@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.spotless)
     `maven-publish`
 }
 
@@ -12,6 +13,7 @@ group = providers.gradleProperty("maven_group").get()
 
 repositories {
     maven("https://api.modrinth.com/maven")
+    mavenCentral()
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -23,15 +25,26 @@ dependencies {
     minecraft(libs.minecraft)
     mappings(libs.yarn)
     modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.kotlin)
     modImplementation(libs.carpet)
+    implementation(libs.snakeyaml)
+    include(libs.snakeyaml)
 }
 
 tasks.named<ProcessResources>("processResources") {
-    inputs.property("version", project.version)
+    val name = providers.gradleProperty("mod_name").get()
+    val description = providers.gradleProperty("mod_description").get()
+    inputs.property("version", version)
+    inputs.property("ame", name)
+    inputs.property("description", description)
     filesMatching("fabric.mod.json") {
-        expand(mapOf("version" to project.version))
+        expand(
+            mapOf(
+                "version" to version,
+                "name" to name,
+                "description" to description,
+            ),
+        )
     }
 }
 
@@ -49,7 +62,7 @@ tasks.withType<KotlinCompile>().configureEach {
 tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     val mcVersion = libs.versions.minecraft.get()
     val baseName = providers.gradleProperty("archives_base_name").get()
-    val fileName = "${baseName}-v${version}-mc${mcVersion}.jar"
+    val fileName = "$baseName-v$version-mc$mcVersion.jar"
     archiveFileName.set(fileName)
 }
 
@@ -59,4 +72,44 @@ java {
 
 kotlin {
     jvmToolchain(21)
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        targetExclude("**/build/**", "**/.gradle/**")
+        ktlint(libs.versions.ktlint.get())
+    }
+    kotlinGradle {
+        target("**/*.gradle.kts")
+        targetExclude("**/build/**", "**/.gradle/**")
+        ktlint(libs.versions.ktlint.get())
+    }
+    java {
+        target("**/*.java")
+        targetExclude("**/build/**", "**/.gradle/**")
+        removeUnusedImports()
+        forbidWildcardImports()
+        forbidModuleImports()
+        cleanthat()
+        googleJavaFormat(libs.versions.googleJavaFormat.get())
+            .reflowLongStrings()
+            .formatJavadoc(false)
+            .reorderImports(true)
+    }
+    format("styling") {
+        target("**/*.md", "**/*.json", "**/*.yaml", "**/*.yml", "**/*.toml")
+        targetExclude("**/build/**", "**/.gradle/**")
+        prettier(
+            mapOf(
+                "prettier" to libs.versions.prettier.get(),
+                "prettier-plugin-toml" to libs.versions.prettierPluginToml.get(),
+            ),
+        ).config(
+            mapOf(
+                "tabWidth" to 2,
+                "plugins" to listOf("prettier-plugin-toml"),
+            ),
+        )
+    }
 }

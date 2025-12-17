@@ -2,9 +2,7 @@
   "required": true,
   "package": "cn.nm.lms.carpetlmsaddition.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "ExampleMixin"
-  ],
+  "mixins": ["ExampleRuleMixin"],
   "injectors": {
     "defaultRequire": 1
   },
