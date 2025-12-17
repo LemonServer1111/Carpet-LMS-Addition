@@ -1,5 +1,12 @@
 carpet:
+  category:
+    LMS: LMS
   rule:
     softVault:
-      name: "softVault"
-      desc: "Set the hardness of vault to be the same as beacon"
+      name: softVault
+      desc: Set the hardness of vault to be the same as beacon
+    allayHealInterval:
+      name: allayHealInterval
+      desc: "Control the interval of allay healing (unit: gt)"
+      extra:
+        "0": 0 represents no healing
