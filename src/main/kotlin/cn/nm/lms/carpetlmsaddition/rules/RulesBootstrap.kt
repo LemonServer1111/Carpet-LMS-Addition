@@ -5,7 +5,7 @@ import carpet.CarpetServer
 object RulesBootstrap {
     fun registerAll() {
         listOf(
-            ExampleRule::class.java,
+            SoftVault::class.java,
         ).forEach { settingsClass ->
             CarpetServer.settingsManager.parseSettingsClass(settingsClass)
         }

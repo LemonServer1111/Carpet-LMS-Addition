@@ -1,6 +1,6 @@
 package cn.nm.lms.carpetlmsaddition.mixin;
 
-import cn.nm.lms.carpetlmsaddition.rules.ExampleRule;
+import cn.nm.lms.carpetlmsaddition.rules.SoftVault;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.block.AbstractBlock.AbstractBlockState;
 import net.minecraft.block.Block;
@@ -12,16 +12,14 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(AbstractBlockState.class)
-public abstract class ExampleRuleMixin {
+public abstract class SoftVaultMixin {
   @Shadow
   public abstract Block getBlock();
 
   @ModifyReturnValue(method = "getHardness", at = @At("RETURN"))
-  private float carpetlmsaddition$stoneHardnessTo100(
-      float original, BlockView world, BlockPos pos) {
-    AbstractBlockState state = (AbstractBlockState) (Object) this;
-    if (ExampleRule.exampleRule && this.getBlock() == Blocks.STONE) {
-      return 100.0f;
+  private float carpetlmsaddition$vaultHardnessTo3(float original, BlockView world, BlockPos pos) {
+    if (SoftVault.softVault && this.getBlock() == Blocks.VAULT) {
+      return 3.0F;
     }
 
     return original;

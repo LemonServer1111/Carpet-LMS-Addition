@@ -1,5 +1,5 @@
 carpet:
   rule:
-    exampleRule:
-      desc: "descTest"
-      name: "nameTest"
+    softVault:
+      name: "softVault"
+      desc: "Set the hardness of vault to be the same as beacon"
