@@ -2,7 +2,11 @@
   "required": true,
   "package": "cn.nm.lms.carpetlmsaddition.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["AllayHealIntervalMixin", "SoftVaultMixin"],
+  "mixins": [
+    "AllayHealIntervalMixin",
+    "PearlIgnoreEntityCollisionMixin",
+    "SoftVaultMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

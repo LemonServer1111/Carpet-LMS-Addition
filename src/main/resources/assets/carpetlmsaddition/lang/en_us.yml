@@ -10,3 +10,6 @@ carpet:
       desc: "Control the interval of allay healing (unit: gt)"
       extra:
         "0": 0 represents no healing
+    pearlIgnoreEntityCollision:
+      name: pearlIgnoreEntityCollision
+      desc: Ender pearls ignore collisions with entities
