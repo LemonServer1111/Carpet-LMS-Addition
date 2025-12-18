@@ -13,3 +13,6 @@ carpet:
     pearlIgnoreEntityCollision:
       name: pearlIgnoreEntityCollision
       desc: Ender pearls ignore collisions with entities
+    playerCommandDropall:
+      name: playerCommandDropall
+      desc: Use "dropall" instead of "dropstack all"

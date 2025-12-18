@@ -1,3 +1,5 @@
+import net.fabricmc.loom.task.RemapJarTask
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -14,6 +16,7 @@ group = providers.gradleProperty("maven_group").get()
 repositories {
     maven("https://api.modrinth.com/maven")
     mavenCentral()
+
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -21,14 +24,17 @@ repositories {
     // for more information about repositories.
 }
 
+val embeddedLibs: Configuration by configurations.creating
+
 dependencies {
     minecraft(libs.minecraft)
     mappings(libs.yarn)
     modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.kotlin)
     modImplementation(libs.carpet)
     implementation(libs.snakeyaml)
-    include(libs.snakeyaml)
+    embeddedLibs(libs.snakeyaml)
 }
 
 tasks.named<ProcessResources>("processResources") {
@@ -59,11 +65,20 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
+tasks.named<RemapJarTask>("remapJar") {
     val mcVersion = libs.versions.minecraft.get()
     val baseName = providers.gradleProperty("archives_base_name").get()
     val fileName = "$baseName-v$version-mc$mcVersion.jar"
     archiveFileName.set(fileName)
+}
+
+tasks.named<Jar>("jar") {
+    from(
+        embeddedLibs.files.map { file ->
+            if (file.isDirectory) file else zipTree(file)
+        },
+    )
+    exclude("META-INF/**")
 }
 
 java {
@@ -99,7 +114,7 @@ spotless {
     }
     format("styling") {
         target("**/*.md", "**/*.json", "**/*.yaml", "**/*.yml", "**/*.toml")
-        targetExclude("**/build/**", "**/.gradle/**")
+        targetExclude("**/build/**", "**/.gradle/**", "**/run/**")
         prettier(
             mapOf(
                 "prettier" to libs.versions.prettier.get(),
@@ -107,7 +122,6 @@ spotless {
             ),
         ).config(
             mapOf(
-                "tabWidth" to 2,
                 "plugins" to listOf("prettier-plugin-toml"),
             ),
         )

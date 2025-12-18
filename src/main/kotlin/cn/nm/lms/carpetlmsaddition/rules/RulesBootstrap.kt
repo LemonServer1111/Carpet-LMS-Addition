@@ -7,6 +7,7 @@ object RulesBootstrap {
         listOf(
             AllayHealInterval::class.java,
             PearlIgnoreEntityCollision::class.java,
+            PlayerCommandDropall::class.java,
             SoftVault::class.java,
         ).forEach { settingsClass ->
             CarpetServer.settingsManager.parseSettingsClass(settingsClass)
