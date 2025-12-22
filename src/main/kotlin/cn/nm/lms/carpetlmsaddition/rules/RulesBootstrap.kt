@@ -1,6 +1,7 @@
 package cn.nm.lms.carpetlmsaddition.rules
 
 import carpet.CarpetServer
+import cn.nm.lms.carpetlmsaddition.rules.playercommanddropall.PlayerCommandDropall
 
 object RulesBootstrap {
     fun registerAll() {
@@ -10,6 +11,7 @@ object RulesBootstrap {
             PearlIgnoreEntityCollision::class.java,
             PlayerCommandDropall::class.java,
             SoftVault::class.java,
+            ZombifiedPiglinSpawnFix::class.java,
         ).forEach { settingsClass ->
             CarpetServer.settingsManager.parseSettingsClass(settingsClass)
         }

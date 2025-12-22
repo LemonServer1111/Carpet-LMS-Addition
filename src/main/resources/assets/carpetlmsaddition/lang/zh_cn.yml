@@ -19,3 +19,6 @@ carpet:
     softVault:
       name: 易碎宝库
       desc: 将宝库的硬度设置为与信标相同
+    zombifiedPiglinSpawnFix:
+      name: 僵尸猪灵生成修复
+      desc: 当僵尸猪人在地狱门上受随机刻而生成时，将会检测他的碰撞箱来判断是否可以生成
