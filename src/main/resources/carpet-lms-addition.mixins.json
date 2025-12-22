@@ -7,7 +7,7 @@
     "FragileVaultMixin",
     "PearlIgnoreEntityCollisionMixin",
     "SoftVaultMixin",
-    "ZombifiedPiglinSpawnFix",
+    "ZombifiedPiglinSpawnFixMixin",
     "playercommanddropall.EntityPlayerActionPackActionMixin",
     "playercommanddropall.PlayerCommandDropAllMixin"
   ],

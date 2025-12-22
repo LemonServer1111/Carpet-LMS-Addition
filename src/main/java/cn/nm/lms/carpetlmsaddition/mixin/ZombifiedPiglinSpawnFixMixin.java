@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(NetherPortalBlock.class)
-public abstract class ZombifiedPiglinSpawnFix {
+public abstract class ZombifiedPiglinSpawnFixMixin {
   @WrapOperation(
       method = "randomTick",
       at =
