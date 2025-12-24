@@ -19,6 +19,9 @@ carpet:
     renewableElytra:
       name: renewableElytra
       desc: Add a crafting recipe to make elytra renewable
+    renewableEnchantedGoldenApples:
+      name: renewableEnchantedGoldenApples
+      desc: Add a crafting recipe to make enchanted golden apples renewable
     softVault:
       name: softVault
       desc: Set the hardness of vault to be the same as beacon

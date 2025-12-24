@@ -10,21 +10,24 @@ import org.apache.logging.log4j.Logger
 
 object CarpetLMSAdditionMod : ModInitializer, CarpetExtension {
     const val MOD_ID: String = "carpet-lms-addition"
-    const val MOD_NAME: String = "Carpet LMS Addition"
 
-    @JvmField
-    val LOGGER: Logger = LogManager.getLogger(MOD_NAME)
-
-    @JvmStatic
-    val version: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+    private val MOD_CONTAINER by lazy(LazyThreadSafetyMode.PUBLICATION) {
         FabricLoader
             .getInstance()
             .getModContainer(MOD_ID)
             .orElseThrow { RuntimeException("Mod not found: $MOD_ID") }
-            .metadata
-            .version
-            .friendlyString
     }
+
+    @JvmStatic
+    val version: String
+        get() = MOD_CONTAINER.metadata.version.friendlyString
+
+    @JvmStatic
+    val MOD_NAME: String
+        get() = MOD_CONTAINER.metadata.name
+
+    @JvmField
+    val LOGGER: Logger = LogManager.getLogger(MOD_NAME)
 
     override fun onInitialize() {
         LOGGER.info("$MOD_NAME version $version")

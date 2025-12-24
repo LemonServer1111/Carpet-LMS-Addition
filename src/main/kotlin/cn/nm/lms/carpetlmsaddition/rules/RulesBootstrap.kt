@@ -2,6 +2,7 @@ package cn.nm.lms.carpetlmsaddition.rules
 
 import carpet.CarpetServer
 import cn.nm.lms.carpetlmsaddition.rules.playercommanddropall.PlayerCommandDropall
+import cn.nm.lms.carpetlmsaddition.rules.renewableEnchantedGoldenApples.RenewableEnchantedGoldenApples
 import cn.nm.lms.carpetlmsaddition.rules.renewableelytra.RenewableElytra
 
 object RulesBootstrap {
@@ -12,6 +13,7 @@ object RulesBootstrap {
             PearlIgnoreEntityCollision::class.java,
             PlayerCommandDropall::class.java,
             RenewableElytra::class.java,
+            RenewableEnchantedGoldenApples::class.java,
             SoftVault::class.java,
             ZombifiedPiglinSpawnFix::class.java,
         ).forEach { settingsClass ->
