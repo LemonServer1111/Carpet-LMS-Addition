@@ -7,6 +7,9 @@ carpet:
       desc: "Control the interval of allay healing (unit: gt)"
       extra:
         "0": 0 represents no healing
+    craftableSponges:
+      name: craftableSponges
+      desc: Add a crafting recipe to make sponges renewable
     fragileVault:
       name: fragileVault
       desc: Set the blast resistance of vault to be the same as beacon
