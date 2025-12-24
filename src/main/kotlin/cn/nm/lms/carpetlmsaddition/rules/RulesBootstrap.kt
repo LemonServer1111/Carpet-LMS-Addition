@@ -2,6 +2,7 @@ package cn.nm.lms.carpetlmsaddition.rules
 
 import carpet.CarpetServer
 import cn.nm.lms.carpetlmsaddition.rules.craftableSponges.CraftableSponges
+import cn.nm.lms.carpetlmsaddition.rules.lowhealthspectator.LowHealthSpectator
 import cn.nm.lms.carpetlmsaddition.rules.playercommanddropall.PlayerCommandDropall
 import cn.nm.lms.carpetlmsaddition.rules.renewableEnchantedGoldenApples.RenewableEnchantedGoldenApples
 import cn.nm.lms.carpetlmsaddition.rules.renewableelytra.RenewableElytra
@@ -12,6 +13,7 @@ object RulesBootstrap {
             AllayHealInterval::class.java,
             CraftableSponges::class.java,
             FragileVault::class.java,
+            LowHealthSpectator::class.java,
             PearlIgnoreEntityCollision::class.java,
             PlayerCommandDropall::class.java,
             RenewableElytra::class.java,
