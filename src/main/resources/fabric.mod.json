@@ -28,6 +28,9 @@
     "fabric-language-kotlin": "*",
     "carpet": ">=1.4.188"
   },
+  "suggest": {
+    "carpet-org-addition": ">=1.38.0"
+  },
   "custom": {
     "modmenu": {
       "parent": "carpet"

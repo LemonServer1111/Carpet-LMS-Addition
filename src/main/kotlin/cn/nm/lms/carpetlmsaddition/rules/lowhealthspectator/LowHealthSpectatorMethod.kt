@@ -7,7 +7,7 @@ import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory
 object LowHealthSpectatorMethod {
     @Rule(
         categories = [LMSRuleCategory.LMS, RuleCategory.SURVIVAL],
-        options = ["vanilla", "mcdreforged", "carpet"],
+        options = ["vanilla", "mcdreforged", "carpet-org-addition", "kick"],
     )
     @JvmField
     var lowHealthSpectatorMethod: String = "vanilla"

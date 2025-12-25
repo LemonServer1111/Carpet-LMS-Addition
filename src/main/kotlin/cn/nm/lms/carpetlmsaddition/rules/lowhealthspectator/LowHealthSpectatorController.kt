@@ -1,8 +1,11 @@
 package cn.nm.lms.carpetlmsaddition.rules.lowhealthspectator
 
 import cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionMod
+import cn.nm.lms.carpetlmsaddition.lib.check.CheckMod
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.world.ServerWorld
+import net.minecraft.text.Text
 import net.minecraft.world.GameMode
 import java.util.UUID
 
@@ -16,18 +19,14 @@ object LowHealthSpectatorController {
                 val world = entity.entityWorld
                 val now = world.time
                 val last = cooldownMap[player.uuid] ?: (now - LowHealthSpectatorCooldown.lowHealthSpectatorCooldown)
-
-                if (now - last < LowHealthSpectatorCooldown.lowHealthSpectatorCooldown) {
-                    return@AfterDamage
-                }
-
                 val hp = player.health
 
                 if (
                     LowHealthSpectator.lowHealthSpectator == "true" &&
+                    now - last >= LowHealthSpectatorCooldown.lowHealthSpectatorCooldown &&
+                    !player.isSpectator &&
                     hp > 0f &&
-                    hp <= LowHealthSpectatorThreshold.lowHealthSpectatorThreshold.toFloat() &&
-                    !player.isSpectator
+                    hp <= LowHealthSpectatorThreshold.lowHealthSpectatorThreshold.toFloat()
                 ) {
                     when (LowHealthSpectatorMethod.lowHealthSpectatorMethod) {
                         "vanilla" -> {
@@ -41,8 +40,23 @@ object LowHealthSpectatorController {
                             )
                         }
 
-                        "carpet" -> {
-                            // TODO
+                        "carpet-org-addition" -> {
+                            if (CheckMod.checkMod("carpet-org-addition", ">=1.38.0")) {
+                                val server = (world as ServerWorld).server
+                                val commandManager = server.commandManager
+                                server.execute {
+                                    commandManager.parseAndExecute(
+                                        player.commandSource,
+                                        "spectator",
+                                    )
+                                }
+                            } else {
+                                CarpetLMSAdditionMod.LOGGER.warn("Carpet Org Addition (>=1.38.0) not installed")
+                            }
+                        }
+
+                        "kick" -> {
+                            player.networkHandler.disconnect(Text.of("Kicked by Carpet LMS Addition"))
                         }
 
                         else -> {
