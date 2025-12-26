@@ -13,9 +13,12 @@ carpet:
     commandLMSSelf:
       name: commandLMSSelf
       desc: View or modify other players' /lms settings
-    craftableSponges:
-      name: craftableSponges
-      desc: Add a crafting recipe to make sponges renewable
+    elytraRecipe:
+      name: renewableElytra
+      desc: Add a crafting recipe to make elytra renewable
+    enchantedGoldenAppleRecipe:
+      name: renewableEnchantedGoldenApples
+      desc: Add a crafting recipe to make enchanted golden apples renewable
     fragileVault:
       name: fragileVault
       desc: Set the blast resistance of vault to be the same as beacon
@@ -39,15 +42,14 @@ carpet:
     playerCommandDropall:
       name: playerCommandDropall
       desc: Use "dropall" instead of "dropstack all"
-    renewableElytra:
-      name: renewableElytra
-      desc: Add a crafting recipe to make elytra renewable
-    renewableEnchantedGoldenApples:
-      name: renewableEnchantedGoldenApples
-      desc: Add a crafting recipe to make enchanted golden apples renewable
     softVault:
       name: softVault
       desc: Set the hardness of vault to be the same as beacon
+    spongeRecipe:
+      name: craftableSponges
+      desc: Add a crafting recipe to make sponges renewable
     zombifiedPiglinSpawnFix:
       name: zombifiedPiglinSpawnFix
-      desc: When spawning zombified piglins in nether gates during random ticks, game will check for its hitbox
+      desc: >-
+        When spawning zombified piglins in nether gates during random ticks,
+        game will check for its hitbox

@@ -1,4 +1,4 @@
-package cn.nm.lms.carpetlmsaddition.rules.renewableEnchantedGoldenApples
+package cn.nm.lms.carpetlmsaddition.rules.enchantedgoldenapplerecipe
 
 import cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionRecipes
 import cn.nm.lms.carpetlmsaddition.lib.recipe.ShapedRecipe
@@ -7,10 +7,10 @@ import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 
-class RenewableEnchantedGoldenApplesRecipe :
+class CraftableEnchantedGoldenApple :
     ShapedRecipe(
         category = CraftingRecipeCategory.MISC,
-        enabled = { RenewableEnchantedGoldenApples.renewableEnchantedGoldenApples },
+        enabled = { EnchantedGoldenAppleRecipe.enchantedGoldenAppleRecipe },
         width = 3,
         height = 3,
         key =
@@ -28,5 +28,5 @@ class RenewableEnchantedGoldenApplesRecipe :
         resultItem = Items.ENCHANTED_GOLDEN_APPLE,
     ) {
     override val serializer0: RecipeSerializer<out SpecialCraftingRecipe> =
-        CarpetLMSAdditionRecipes.RENEWABLE_ENCHANTED_GOLDEN_APPLES
+        CarpetLMSAdditionRecipes.CRAFTABLE_ENCHANTED_GOLDEN_APPLE
 }

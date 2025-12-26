@@ -1,13 +1,13 @@
-package cn.nm.lms.carpetlmsaddition.rules.renewableEnchantedGoldenApples
+package cn.nm.lms.carpetlmsaddition.rules.spongerecipe
 
 import carpet.api.settings.Rule
 import carpet.api.settings.RuleCategory
 import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory
 
-object RenewableEnchantedGoldenApples {
+object SpongeRecipe {
     @Rule(
         categories = [LMSRuleCategory.LMS, RuleCategory.SURVIVAL],
     )
     @JvmField
-    var renewableEnchantedGoldenApples: Boolean = false
+    var spongeRecipe: Boolean = false
 }

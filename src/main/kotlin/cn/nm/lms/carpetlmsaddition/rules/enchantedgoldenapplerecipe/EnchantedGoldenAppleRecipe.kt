@@ -1,13 +1,13 @@
-package cn.nm.lms.carpetlmsaddition.rules.renewableelytra
+package cn.nm.lms.carpetlmsaddition.rules.enchantedgoldenapplerecipe
 
 import carpet.api.settings.Rule
 import carpet.api.settings.RuleCategory
 import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory
 
-object RenewableElytra {
+object EnchantedGoldenAppleRecipe {
     @Rule(
         categories = [LMSRuleCategory.LMS, RuleCategory.SURVIVAL],
     )
     @JvmField
-    var renewableElytra: Boolean = false
+    var enchantedGoldenAppleRecipe: Boolean = false
 }

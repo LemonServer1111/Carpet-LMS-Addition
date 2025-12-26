@@ -1,4 +1,4 @@
-package cn.nm.lms.carpetlmsaddition.rules.renewableelytra
+package cn.nm.lms.carpetlmsaddition.rules.elytrarecipe
 
 import cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionRecipes
 import cn.nm.lms.carpetlmsaddition.lib.recipe.ShapedRecipe
@@ -9,10 +9,10 @@ import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.collection.DefaultedList
 
-class RenewableElytraRecipe :
+class CraftableElytra :
     ShapedRecipe(
         category = CraftingRecipeCategory.EQUIPMENT,
-        enabled = { RenewableElytra.renewableElytra },
+        enabled = { ElytraRecipe.elytraRecipe },
         width = 3,
         height = 3,
         key =
@@ -40,5 +40,5 @@ class RenewableElytraRecipe :
         },
     ) {
     override val serializer0: RecipeSerializer<out SpecialCraftingRecipe> =
-        CarpetLMSAdditionRecipes.RENEWABLE_ELYTRA
+        CarpetLMSAdditionRecipes.CRAFTABLE_ELYTRA
 }

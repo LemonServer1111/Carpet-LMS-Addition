@@ -1,4 +1,4 @@
-package cn.nm.lms.carpetlmsaddition.rules.craftableSponges
+package cn.nm.lms.carpetlmsaddition.rules.spongerecipe
 
 import cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionRecipes
 import cn.nm.lms.carpetlmsaddition.lib.recipe.ShapedRecipe
@@ -7,10 +7,10 @@ import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 
-class CraftableSpongesRecipe :
+class CraftableSponge :
     ShapedRecipe(
         category = CraftingRecipeCategory.MISC,
-        enabled = { CraftableSponges.craftableSponges },
+        enabled = { SpongeRecipe.spongeRecipe },
         width = 3,
         height = 3,
         key =
@@ -28,5 +28,5 @@ class CraftableSpongesRecipe :
         resultItem = Items.SPONGE,
     ) {
     override val serializer0: RecipeSerializer<out SpecialCraftingRecipe> =
-        CarpetLMSAdditionRecipes.CRAFTABLE_SPONGES
+        CarpetLMSAdditionRecipes.CRAFTABLE_SPONGE
 }
