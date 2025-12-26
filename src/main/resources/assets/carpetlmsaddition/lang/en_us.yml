@@ -3,53 +3,38 @@ carpet:
     LMS: LMS
   rule:
     allayHealInterval:
-      name: allayHealInterval
       desc: "Control the interval of allay healing (unit: gt)"
       extra:
         "0": 0 represents no healing
     commandLMSOthers:
-      name: commandLMSOthers
       desc: View or modify your own /lms settings
     commandLMSSelf:
-      name: commandLMSSelf
       desc: View or modify other players' /lms settings
     elytraRecipe:
-      name: renewableElytra
       desc: Add a crafting recipe to make elytra renewable
     enchantedGoldenAppleRecipe:
-      name: renewableEnchantedGoldenApples
       desc: Add a crafting recipe to make enchanted golden apples renewable
     fragileVault:
-      name: fragileVault
       desc: Set the blast resistance of vault to be the same as beacon
     lowHealthSpectator:
-      name: lowHealthSpectator
       desc: >-
         Switches the player to spectator mode
         when their health falls below the configured threshold after taking damage
     lowHealthSpectatorCooldown:
-      name: lowHealthSpectatorCooldown
       desc: Sets a cooldown before the player can be switched to spectator mode again
     lowHealthSpectatorMethod:
-      name: lowHealthSpectatorMethod
       desc: Defines the method used to switch the player into spectator mode
     lowHealthSpectatorThreshold:
-      name: lowHealthSpectatorThreshold
       desc: The health threshold below which the player will be switched to spectator mode
     pearlIgnoreEntityCollision:
-      name: pearlIgnoreEntityCollision
       desc: Ender pearls ignore collisions with entities
     playerCommandDropall:
-      name: playerCommandDropall
       desc: Use "dropall" instead of "dropstack all"
     softVault:
-      name: softVault
       desc: Set the hardness of vault to be the same as beacon
     spongeRecipe:
-      name: craftableSponges
       desc: Add a crafting recipe to make sponges renewable
     zombifiedPiglinSpawnFix:
-      name: zombifiedPiglinSpawnFix
       desc: >-
         When spawning zombified piglins in nether gates during random ticks,
         game will check for its hitbox
