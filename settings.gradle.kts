@@ -11,6 +11,7 @@ pluginManagement {
 listOf(
     "1_21_10",
     "1_21_11",
+    "26_1",
 ).forEach {
     include("mc$it")
     project(":mc$it").projectDir = file("versions/$it")

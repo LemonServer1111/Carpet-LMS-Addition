@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.loom)
+    alias(libs.plugins.loomOld)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.spotless)
     `maven-publish`

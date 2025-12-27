@@ -1,9 +1,8 @@
-import net.fabricmc.loom.task.RemapJarTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.loomOld)
+    alias(libs.plugins.loom)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.spotless)
     `maven-publish`
@@ -21,11 +20,10 @@ val carpetVersion = cfg.getString("versions.carpet")
 
 dependencies {
     minecraft("$minecraftModule:$minecraftVersion")
-    mappings(loom.officialMojangMappings())
-    modImplementation(libs.fabricLoader)
-    modImplementation("$fabricApiModule:$fabricApiVersion")
-    modImplementation(libs.fabricKotlin)
-    modImplementation("$carpetModule:$carpetVersion")
+    implementation(libs.fabricLoader)
+    implementation("$fabricApiModule:$fabricApiVersion")
+    implementation(libs.fabricKotlin)
+    implementation("$carpetModule:$carpetVersion")
     implementation(libs.snakeyaml)
     implementation(libs.gson)
     include(libs.snakeyaml)
@@ -58,24 +56,29 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release.set(21)
+    javaCompiler.set(
+        javaToolchains.compilerFor {
+            languageVersion.set(JavaLanguageVersion.of(25))
+        },
+    )
+    options.release.set(25)
     options.encoding = "UTF-8"
 }
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_25)
     }
 }
 
-tasks.named<RemapJarTask>("remapJar") {
+tasks.jar {
     val baseName = providers.gradleProperty("archives_base_name").get()
     val fileName = "$baseName-v$version-mc$minecraftVersion.jar"
     archiveFileName.set(fileName)
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 kotlin {
@@ -84,8 +87,8 @@ kotlin {
 
 sourceSets {
     named("main") {
-        java.srcDir(rootProject.file("VersionSrc/1.21.10/src/main/java"))
-        kotlin.srcDir(rootProject.file("versionSrc/1.21.10/src/main/kotlin"))
+        java.srcDir(rootProject.file("VersionSrc/1.21.11+/src/main/java"))
+        kotlin.srcDir(rootProject.file("versionSrc/1.21.11+/src/main/kotlin"))
         java.srcDir(rootProject.file("src/main/java"))
         kotlin.srcDir(rootProject.file("src/main/kotlin"))
         resources.srcDir(rootProject.file("src/main/resources"))
