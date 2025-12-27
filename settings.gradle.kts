@@ -8,5 +8,10 @@ pluginManagement {
     }
 }
 
-include("versions:1.21.10")
-project(":versions:1.21.10").projectDir = file("versions/1.21.10")
+listOf(
+    "1_21_10",
+    "1_21_11",
+).forEach {
+    include("mc$it")
+    project(":mc$it").projectDir = file("versions/$it")
+}

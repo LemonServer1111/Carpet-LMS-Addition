@@ -5,7 +5,6 @@ import cn.nm.lms.carpetlmsaddition.lib.PlayerConfig
 import cn.nm.lms.carpetlmsaddition.lib.check.CheckMod
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.GameType
 import java.util.UUID
@@ -38,13 +37,13 @@ object LowHealthSpectatorController {
                         "mcdreforged" -> {
                             CarpetLMSAdditionMod.LOGGER.info(
                                 "<{}> !!spec",
-                                player.displayName?.string,
+                                player.name.string,
                             )
                         }
 
                         "carpet-org-addition" -> {
                             if (CheckMod.checkMod("carpet-org-addition", ">=1.38.0")) {
-                                val server = (world as ServerLevel).server
+                                val server = world.server
                                 val commandManager = server.commands
                                 server.execute {
                                     commandManager.performPrefixedCommand(
