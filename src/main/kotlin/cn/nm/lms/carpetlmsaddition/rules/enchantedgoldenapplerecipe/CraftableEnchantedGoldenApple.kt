@@ -2,14 +2,14 @@ package cn.nm.lms.carpetlmsaddition.rules.enchantedgoldenapplerecipe
 
 import cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionRecipes
 import cn.nm.lms.carpetlmsaddition.lib.recipe.ShapedRecipe
-import net.minecraft.item.Items
-import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.SpecialCraftingRecipe
-import net.minecraft.recipe.book.CraftingRecipeCategory
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.crafting.CraftingBookCategory
+import net.minecraft.world.item.crafting.CustomRecipe
+import net.minecraft.world.item.crafting.RecipeSerializer
 
 class CraftableEnchantedGoldenApple :
     ShapedRecipe(
-        category = CraftingRecipeCategory.MISC,
+        category = CraftingBookCategory.MISC,
         enabled = { EnchantedGoldenAppleRecipe.enchantedGoldenAppleRecipe },
         width = 3,
         height = 3,
@@ -27,6 +27,6 @@ class CraftableEnchantedGoldenApple :
             ),
         resultItem = Items.ENCHANTED_GOLDEN_APPLE,
     ) {
-    override val serializer0: RecipeSerializer<out SpecialCraftingRecipe> =
+    override val serializer0: RecipeSerializer<out CustomRecipe> =
         CarpetLMSAdditionRecipes.CRAFTABLE_ENCHANTED_GOLDEN_APPLE
 }

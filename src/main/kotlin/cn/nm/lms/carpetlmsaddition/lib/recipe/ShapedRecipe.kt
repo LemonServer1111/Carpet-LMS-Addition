@@ -1,73 +1,73 @@
 package cn.nm.lms.carpetlmsaddition.lib.recipe
 
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.IngredientPlacement
-import net.minecraft.recipe.RecipeSerializer
-import net.minecraft.recipe.SpecialCraftingRecipe
-import net.minecraft.recipe.book.CraftingRecipeCategory
-import net.minecraft.recipe.display.RecipeDisplay
-import net.minecraft.recipe.display.ShapedCraftingRecipeDisplay
-import net.minecraft.recipe.display.SlotDisplay
-import net.minecraft.recipe.input.CraftingRecipeInput
-import net.minecraft.registry.RegistryWrapper
-import net.minecraft.util.collection.DefaultedList
-import net.minecraft.world.World
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.NonNullList
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.crafting.CraftingBookCategory
+import net.minecraft.world.item.crafting.CraftingInput
+import net.minecraft.world.item.crafting.CustomRecipe
+import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.item.crafting.PlacementInfo
+import net.minecraft.world.item.crafting.RecipeSerializer
+import net.minecraft.world.item.crafting.display.RecipeDisplay
+import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay
+import net.minecraft.world.item.crafting.display.SlotDisplay
+import net.minecraft.world.level.Level
 import java.util.Optional
 
 abstract class ShapedRecipe(
-    category: CraftingRecipeCategory,
+    category: CraftingBookCategory,
     private val enabled: () -> Boolean,
     private val width: Int,
     private val height: Int,
     private val key: List<Item?>,
     private val resultItem: Item,
     private val resultCount: Int = 1,
-    private val remainder: (CraftingRecipeInput) -> DefaultedList<ItemStack> =
-        { input -> DefaultedList.ofSize(input.size(), ItemStack.EMPTY) },
-) : SpecialCraftingRecipe(category) {
+    private val remainder: (CraftingInput) -> NonNullList<ItemStack> =
+        { input -> NonNullList.withSize(input.size(), ItemStack.EMPTY) },
+) : CustomRecipe(category) {
     override fun matches(
-        input: CraftingRecipeInput,
-        world: World,
+        input: CraftingInput,
+        world: Level,
     ): Boolean {
         if (!enabled()) return false
-        if (input.width != width || input.height != height) return false
+        if (input.width() != width || input.height() != height) return false
 
-        for (y in 0 until input.height) {
-            for (x in 0 until input.width) {
+        for (y in 0 until input.height()) {
+            for (x in 0 until input.width()) {
                 val expect = key[y * width + x]
-                val stack = input.getStackInSlot(x, y)
+                val stack = input.getItem(x, y)
 
                 if (expect == null) {
                     if (!stack.isEmpty) return false
                 } else {
-                    if (stack.isEmpty || !stack.isOf(expect)) return false
+                    if (stack.isEmpty || !stack.`is`(expect)) return false
                 }
             }
         }
         return true
     }
 
-    override fun craft(
-        recipeInput: CraftingRecipeInput,
-        registries: RegistryWrapper.WrapperLookup,
-    ): ItemStack = ItemStack(resultItem, resultCount).also { it.damage = 0 }
+    override fun assemble(
+        recipeInput: CraftingInput,
+        registries: HolderLookup.Provider,
+    ): ItemStack = ItemStack(resultItem, resultCount).also { it.damageValue = 0 }
 
-    override fun getRecipeRemainders(input: CraftingRecipeInput): DefaultedList<ItemStack> =
+    override fun getRemainingItems(input: CraftingInput): NonNullList<ItemStack> =
         if (enabled()) {
             remainder(input)
         } else {
-            DefaultedList.ofSize(input.size(), ItemStack.EMPTY)
+            NonNullList.withSize(input.size(), ItemStack.EMPTY)
         }
 
-    override fun isIgnoredInRecipeBook(): Boolean = false
+    override fun isSpecial(): Boolean = false
 
-    override fun getDisplays(): List<RecipeDisplay> {
+    override fun display(): List<RecipeDisplay> {
         if (!enabled()) return emptyList()
 
-        val empty = SlotDisplay.EmptySlotDisplay.INSTANCE
+        val empty = SlotDisplay.Empty.INSTANCE
         val ingredients =
             key.map {
                 if (it == null) empty else SlotDisplay.ItemSlotDisplay(it)
@@ -84,20 +84,20 @@ abstract class ShapedRecipe(
         )
     }
 
-    override fun getIngredientPlacement(): IngredientPlacement {
-        if (!enabled()) return IngredientPlacement.NONE
+    override fun placementInfo(): PlacementInfo {
+        if (!enabled()) return PlacementInfo.NOT_PLACEABLE
         val slots =
             key.map {
                 if (it == null) {
                     Optional.empty()
                 } else {
-                    Optional.of(Ingredient.ofItems(it))
+                    Optional.of(Ingredient.of(it))
                 }
             }
-        return IngredientPlacement.forMultipleSlots(slots)
+        return PlacementInfo.createFromOptionals(slots)
     }
 
-    abstract val serializer0: RecipeSerializer<out SpecialCraftingRecipe>
+    abstract val serializer0: RecipeSerializer<out CustomRecipe>
 
-    override fun getSerializer(): RecipeSerializer<out SpecialCraftingRecipe> = serializer0
+    override fun getSerializer(): RecipeSerializer<out CustomRecipe> = serializer0
 }

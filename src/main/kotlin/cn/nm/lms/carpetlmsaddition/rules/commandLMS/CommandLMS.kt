@@ -4,11 +4,11 @@ import carpet.utils.CommandHelper
 import cn.nm.lms.carpetlmsaddition.lib.PlayerConfig
 import com.mojang.brigadier.arguments.StringArgumentType
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.minecraft.command.argument.EntityArgumentType
-import net.minecraft.server.command.CommandManager
-import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
+import net.minecraft.commands.arguments.EntityArgument
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 
 object CommandLMS {
     @JvmField
@@ -29,8 +29,8 @@ object CommandLMS {
     ) = hasConfig(config) && valuesOf(config).contains(value)
 
     private fun canUse(
-        src: ServerCommandSource,
-        target: ServerPlayerEntity,
+        src: CommandSourceStack,
+        target: ServerPlayer,
     ): Boolean {
         val self = src.player
         val isSelf = (self != null && self.uuid == target.uuid)
@@ -42,37 +42,37 @@ object CommandLMS {
         CommandRegistrationCallback.EVENT.register(
             CommandRegistrationCallback { dispatcher, _, _ ->
                 dispatcher.register(
-                    CommandManager
+                    Commands
                         .literal("lms")
                         .then(
-                            CommandManager
-                                .argument("player", EntityArgumentType.player())
+                            Commands
+                                .argument("player", EntityArgument.player())
                                 .then(
-                                    CommandManager
+                                    Commands
                                         .argument("config", StringArgumentType.word())
                                         .suggests { _, builder ->
                                             configList().forEach { builder.suggest(it) }
                                             builder.buildFuture()
                                         }.executes { ctx ->
                                             val src = ctx.source
-                                            val target = EntityArgumentType.getPlayer(ctx, "player")
+                                            val target = EntityArgument.getPlayer(ctx, "player")
                                             val config = StringArgumentType.getString(ctx, "config")
                                             if (!hasConfig(config)) {
-                                                src.sendError(Text.literal("Unknown config: $config"))
+                                                src.sendFailure(Component.literal("Unknown config: $config"))
                                                 return@executes 0
                                             }
                                             if (!canUse(src, target)) {
-                                                src.sendError(Text.literal("No permission"))
+                                                src.sendFailure(Component.literal("No permission"))
                                                 return@executes 0
                                             }
                                             val raw = PlayerConfig.get(target.uuid, config)
-                                            src.sendFeedback(
-                                                { Text.literal("[Carpet LMS Addition] $config = ${raw ?: "null"}") },
+                                            src.sendSuccess(
+                                                { Component.literal("[Carpet LMS Addition] $config = ${raw ?: "null"}") },
                                                 false,
                                             )
                                             1
                                         }.then(
-                                            CommandManager
+                                            Commands
                                                 .argument("value", StringArgumentType.word())
                                                 .suggests { ctx, builder ->
                                                     val config = StringArgumentType.getString(ctx, "config")
@@ -80,20 +80,20 @@ object CommandLMS {
                                                     builder.buildFuture()
                                                 }.executes { ctx ->
                                                     val src = ctx.source
-                                                    val target = EntityArgumentType.getPlayer(ctx, "player")
+                                                    val target = EntityArgument.getPlayer(ctx, "player")
                                                     val config = StringArgumentType.getString(ctx, "config")
                                                     val value = StringArgumentType.getString(ctx, "value")
                                                     if (!hasValue(config, value)) {
-                                                        src.sendError(Text.literal("Unknown config or value: $config $value"))
+                                                        src.sendFailure(Component.literal("Unknown config or value: $config $value"))
                                                         return@executes 0
                                                     }
                                                     if (!canUse(src, target)) {
-                                                        src.sendError(Text.literal("No permission"))
+                                                        src.sendFailure(Component.literal("No permission"))
                                                         return@executes 0
                                                     }
                                                     PlayerConfig.set(target.uuid, config, value)
-                                                    src.sendFeedback(
-                                                        { Text.literal("[Carpet LMS Addition] $config = $value") },
+                                                    src.sendSuccess(
+                                                        { Component.literal("[Carpet LMS Addition] $config = $value") },
                                                         false,
                                                     )
                                                     1

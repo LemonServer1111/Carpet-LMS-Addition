@@ -22,14 +22,11 @@
   },
   "mixins": ["carpet-lms-addition.mixins.json"],
   "depends": {
-    "fabricloader": ">=0.14.25",
-    "minecraft": "~1.21.10",
-    "fabric-api": "*",
-    "fabric-language-kotlin": "*",
-    "carpet": ">=1.4.188"
-  },
-  "suggest": {
-    "carpet-org-addition": ">=1.38.0"
+    "fabricloader": "${fabricloader}",
+    "minecraft": "${minecraft}",
+    "fabric-api": "${fabric_api}",
+    "fabric-language-kotlin": "${fabric_language_kotlin}",
+    "carpet": "${carpet}"
   },
   "custom": {
     "modmenu": {

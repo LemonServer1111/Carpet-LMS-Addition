@@ -3,19 +3,19 @@ package cn.nm.lms.carpetlmsaddition
 import cn.nm.lms.carpetlmsaddition.rules.elytrarecipe.CraftableElytra
 import cn.nm.lms.carpetlmsaddition.rules.enchantedgoldenapplerecipe.CraftableEnchantedGoldenApple
 import cn.nm.lms.carpetlmsaddition.rules.spongerecipe.CraftableSponge
-import net.minecraft.recipe.SpecialCraftingRecipe.SpecialRecipeSerializer
-import net.minecraft.registry.Registries
-import net.minecraft.registry.Registry
-import net.minecraft.util.Identifier
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.crafting.CustomRecipe.Serializer
 
 object CarpetLMSAdditionRecipes {
     @JvmField
-    val CRAFTABLE_ELYTRA: SpecialRecipeSerializer<CraftableElytra> =
-        SpecialRecipeSerializer { CraftableElytra() }
-    val CRAFTABLE_ENCHANTED_GOLDEN_APPLE: SpecialRecipeSerializer<CraftableEnchantedGoldenApple> =
-        SpecialRecipeSerializer { CraftableEnchantedGoldenApple() }
-    val CRAFTABLE_SPONGE: SpecialRecipeSerializer<CraftableSponge> =
-        SpecialRecipeSerializer { CraftableSponge() }
+    val CRAFTABLE_ELYTRA: Serializer<CraftableElytra> =
+        Serializer { CraftableElytra() }
+    val CRAFTABLE_ENCHANTED_GOLDEN_APPLE: Serializer<CraftableEnchantedGoldenApple> =
+        Serializer { CraftableEnchantedGoldenApple() }
+    val CRAFTABLE_SPONGE: Serializer<CraftableSponge> =
+        Serializer { CraftableSponge() }
 
     fun register() {
         mapOf(
@@ -24,8 +24,8 @@ object CarpetLMSAdditionRecipes {
             "craftablesponge" to CRAFTABLE_SPONGE,
         ).forEach { (path, serializer) ->
             Registry.register(
-                Registries.RECIPE_SERIALIZER,
-                Identifier.of(CarpetLMSAdditionMod.MOD_ID, path),
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                ResourceLocation.fromNamespaceAndPath(CarpetLMSAdditionMod.MOD_ID, path),
                 serializer,
             )
         }

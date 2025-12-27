@@ -31,17 +31,17 @@ public class EntityPlayerActionPackActionMixin implements DropAllActionExtension
           @At(
               value = "INVOKE",
               target =
-                  "Lcarpet/helpers/EntityPlayerActionPack$ActionType;execute(Lnet/minecraft/server/network/ServerPlayerEntity;Lcarpet/helpers/EntityPlayerActionPack$Action;)Z"),
+                  "Lcarpet/helpers/EntityPlayerActionPack$ActionType;execute(Lnet/minecraft/server/level/ServerPlayer;Lcarpet/helpers/EntityPlayerActionPack$Action;)Z"),
       remap = false)
   private boolean lms$wrapExecute(
       EntityPlayerActionPack.ActionType type,
-      net.minecraft.server.network.ServerPlayerEntity player,
+      net.minecraft.server.level.ServerPlayer player,
       EntityPlayerActionPack.Action action,
       Operation<Boolean> original,
       EntityPlayerActionPack pack) {
     if (type == EntityPlayerActionPack.ActionType.DROP_STACK && carpetlmsaddition$isDropAll()) {
       if (!CommandHelper.canUseCommand(
-          player.getCommandSource(), PlayerCommandDropall.playerCommandDropall)) {
+          player.createCommandSourceStack(), PlayerCommandDropall.playerCommandDropall)) {
         return false;
       }
       EntityPlayerActionPack actionPack = ((ServerPlayerInterface) player).getActionPack();

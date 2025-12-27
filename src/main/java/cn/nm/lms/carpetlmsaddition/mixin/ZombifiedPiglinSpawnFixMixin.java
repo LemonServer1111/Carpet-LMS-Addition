@@ -4,14 +4,14 @@ import static cn.nm.lms.carpetlmsaddition.rules.ZombifiedPiglinSpawnFix.zombifie
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.NetherPortalBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.block.NetherPortalBlock;
+import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,20 +20,20 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class ZombifiedPiglinSpawnFixMixin {
   @Unique
   private static boolean carpetlmsaddition$passesNaturalCollisionChecks(
-      EntityType<?> type, ServerWorld world, BlockPos spawnPos, SpawnReason reason) {
+      EntityType<?> type, ServerLevel world, BlockPos spawnPos, EntitySpawnReason reason) {
     double x = spawnPos.getX() + 0.5D;
     double y = spawnPos.getY();
     double z = spawnPos.getZ() + 0.5D;
-    Box spawnBox = type.getSpawnBox(x, y, z);
-    if (!world.isSpaceEmpty(spawnBox)) {
+    AABB spawnBox = type.getSpawnAABB(x, y, z);
+    if (!world.noCollision(spawnBox)) {
       return false;
     }
     Entity entity = type.create(world, reason);
-    if (!(entity instanceof MobEntity mob)) {
+    if (!(entity instanceof Mob mob)) {
       return true;
     }
-    mob.refreshPositionAndAngles(x, y, z, 0.0F, 0.0F);
-    return mob.canSpawn(world);
+    mob.snapTo(x, y, z, 0.0F, 0.0F);
+    return mob.checkSpawnObstruction(world);
   }
 
   @WrapOperation(
@@ -42,12 +42,12 @@ public abstract class ZombifiedPiglinSpawnFixMixin {
           @At(
               value = "INVOKE",
               target =
-                  "Lnet/minecraft/entity/EntityType;spawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/SpawnReason;)Lnet/minecraft/entity/Entity;"))
+                  "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/EntitySpawnReason;)Lnet/minecraft/world/entity/Entity;"))
   private Entity carpetlmsaddition$onlyIfClear(
       EntityType<?> type,
-      ServerWorld world,
+      ServerLevel world,
       BlockPos spawnPos,
-      SpawnReason reason,
+      EntitySpawnReason reason,
       Operation<Entity> origin) {
     if (zombifiedPiglinSpawnFix
         && !carpetlmsaddition$passesNaturalCollisionChecks(type, world, spawnPos, reason)) {

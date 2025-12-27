@@ -4,10 +4,10 @@ import cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionMod
 import cn.nm.lms.carpetlmsaddition.lib.PlayerConfig
 import cn.nm.lms.carpetlmsaddition.lib.check.CheckMod
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
-import net.minecraft.text.Text
-import net.minecraft.world.GameMode
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.GameType
 import java.util.UUID
 
 object LowHealthSpectatorController {
@@ -16,9 +16,9 @@ object LowHealthSpectatorController {
     fun init() {
         ServerLivingEntityEvents.AFTER_DAMAGE.register(
             ServerLivingEntityEvents.AfterDamage { entity, _, _, _, _ ->
-                val player = entity as? ServerPlayerEntity ?: return@AfterDamage
-                val world = entity.entityWorld
-                val now = world.time
+                val player = entity as? ServerPlayer ?: return@AfterDamage
+                val world = entity.level()
+                val now = world.gameTime
                 val playerUUID = player.uuid
                 val last = cooldownMap[playerUUID] ?: (now - LowHealthSpectatorCooldown.lowHealthSpectatorCooldown)
                 val hp = player.health
@@ -32,7 +32,7 @@ object LowHealthSpectatorController {
                 ) {
                     when (LowHealthSpectatorMethod.lowHealthSpectatorMethod) {
                         "vanilla" -> {
-                            player.changeGameMode(GameMode.SPECTATOR)
+                            player.setGameMode(GameType.SPECTATOR)
                         }
 
                         "mcdreforged" -> {
@@ -44,11 +44,11 @@ object LowHealthSpectatorController {
 
                         "carpet-org-addition" -> {
                             if (CheckMod.checkMod("carpet-org-addition", ">=1.38.0")) {
-                                val server = (world as ServerWorld).server
-                                val commandManager = server.commandManager
+                                val server = (world as ServerLevel).server
+                                val commandManager = server.commands
                                 server.execute {
-                                    commandManager.parseAndExecute(
-                                        player.commandSource,
+                                    commandManager.performPrefixedCommand(
+                                        player.createCommandSourceStack(),
                                         "spectator",
                                     )
                                 }
@@ -58,7 +58,7 @@ object LowHealthSpectatorController {
                         }
 
                         "kick" -> {
-                            player.networkHandler.disconnect(Text.of("Kicked by Carpet LMS Addition"))
+                            player.connection.disconnect(Component.nullToEmpty("Kicked by Carpet LMS Addition"))
                         }
 
                         else -> {
