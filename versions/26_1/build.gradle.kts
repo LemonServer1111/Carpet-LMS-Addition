@@ -1,3 +1,4 @@
+import net.fabricmc.loom.task.AbstractRunTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -69,6 +70,14 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_25)
     }
+}
+
+tasks.withType<AbstractRunTask>().configureEach {
+    javaLauncher.set(
+        javaToolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(25))
+        },
+    )
 }
 
 tasks.jar {
