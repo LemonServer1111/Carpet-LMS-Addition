@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(NetherPortalBlock.class)
 public abstract class ZombifiedPiglinSpawnFixMixin {
   @Unique
-  private static boolean carpetlmsaddition$passesNaturalCollisionChecks(
+  private static boolean passesNaturalCollisionChecks(
       EntityType<?> type, ServerLevel world, BlockPos spawnPos, EntitySpawnReason reason) {
     double x = spawnPos.getX() + 0.5D;
     double y = spawnPos.getY();
@@ -43,14 +43,13 @@ public abstract class ZombifiedPiglinSpawnFixMixin {
               value = "INVOKE",
               target =
                   "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/EntitySpawnReason;)Lnet/minecraft/world/entity/Entity;"))
-  private Entity carpetlmsaddition$onlyIfClear(
+  private Entity onlyIfClear(
       EntityType<?> type,
       ServerLevel world,
       BlockPos spawnPos,
       EntitySpawnReason reason,
       Operation<Entity> origin) {
-    if (zombifiedPiglinSpawnFix
-        && !carpetlmsaddition$passesNaturalCollisionChecks(type, world, spawnPos, reason)) {
+    if (zombifiedPiglinSpawnFix && !passesNaturalCollisionChecks(type, world, spawnPos, reason)) {
       return null;
     }
     return origin.call(type, world, spawnPos, reason);

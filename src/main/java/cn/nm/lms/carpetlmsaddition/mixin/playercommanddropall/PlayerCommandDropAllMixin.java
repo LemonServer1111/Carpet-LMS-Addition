@@ -65,7 +65,7 @@ public abstract class PlayerCommandDropAllMixin {
   @Unique
   private static void markAndStart(
       EntityPlayerActionPack pack, EntityPlayerActionPack.Action action) {
-    ((DropAllActionExtension) action).carpetlmsaddition$setDropAll(true);
+    ((DropAllActionExtension) action).setDropAll(true);
     pack.start(EntityPlayerActionPack.ActionType.DROP_STACK, action);
   }
 

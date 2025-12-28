@@ -16,12 +16,12 @@ public class EntityPlayerActionPackActionMixin implements DropAllActionExtension
   @Unique private boolean lms$dropAll;
 
   @Unique
-  public void carpetlmsaddition$setDropAll(boolean v) {
+  public void setDropAll(boolean v) {
     this.lms$dropAll = v;
   }
 
   @Unique
-  public boolean carpetlmsaddition$isDropAll() {
+  public boolean isDropAll() {
     return this.lms$dropAll;
   }
 
@@ -39,7 +39,7 @@ public class EntityPlayerActionPackActionMixin implements DropAllActionExtension
       EntityPlayerActionPack.Action action,
       Operation<Boolean> original,
       EntityPlayerActionPack pack) {
-    if (type == EntityPlayerActionPack.ActionType.DROP_STACK && carpetlmsaddition$isDropAll()) {
+    if (type == EntityPlayerActionPack.ActionType.DROP_STACK && isDropAll()) {
       if (!CommandHelper.canUseCommand(
           player.createCommandSourceStack(), PlayerCommandDropall.playerCommandDropall)) {
         return false;

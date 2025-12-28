@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ExplosionDamageCalculator.class)
 public abstract class FragileVaultMixin {
   @ModifyReturnValue(method = "getBlockExplosionResistance", at = @At("RETURN"))
-  private Optional<Float> carpetlmsaddition$vaultBlastResistanceTo3(
+  private Optional<Float> vaultBlastResistanceTo3(
       Optional<Float> original,
       Explosion explosion,
       BlockGetter world,

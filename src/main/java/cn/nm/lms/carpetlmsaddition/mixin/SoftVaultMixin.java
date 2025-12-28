@@ -17,8 +17,7 @@ public abstract class SoftVaultMixin {
   public abstract Block getBlock();
 
   @ModifyReturnValue(method = "getDestroySpeed", at = @At("RETURN"))
-  private float carpetlmsaddition$vaultHardnessTo3(
-      float original, BlockGetter world, BlockPos pos) {
+  private float vaultHardnessTo3(float original, BlockGetter world, BlockPos pos) {
     if (SoftVault.softVault && this.getBlock() == Blocks.VAULT) {
       return 3.0F;
     }
