@@ -1,4 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.spotless)
 }
 
@@ -9,12 +14,77 @@ allprojects {
     repositories {
         maven("https://api.modrinth.com/maven")
         mavenCentral()
+    }
 
-        // Add repositories to retrieve artifacts from in here.
-        // You should only use this when depending on other mods because
-        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-        // for more information about repositories.
+    plugins.withId("java") {
+        extensions.configure<JavaPluginExtension>("java") {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(25))
+                vendor.set(JvmVendorSpec.AZUL)
+            }
+        }
+    }
+}
+
+subprojects {
+
+    if (!tasks.names.contains("prepareKotlinBuildScriptModel")) {
+        tasks.register("prepareKotlinBuildScriptModel")
+    }
+
+    val cfgFile = file("version.toml")
+
+    val cfg = readToml(cfgFile)!!
+    val minecraftVersion = cfg.getString("versions.minecraft")
+
+    tasks.withType<ProcessResources>().configureEach {
+        val name = providers.gradleProperty("mod_name").get()
+        val description = providers.gradleProperty("mod_description").get()
+        val fabricloaderDependency = providers.gradleProperty("fabricloader_dependency").get()
+        val minecraftDependency = cfg.getString("dependency.minecraft")
+        val fabricApiDependency = cfg.getString("dependency.fabric-api")
+        val fabricLanguageKotlinDependency =
+            providers.gradleProperty("fabric_language_kotlin_dependency").get()
+        val carpetDependency = cfg.getString("dependency.carpet")
+        val replaceMap =
+            mapOf(
+                "version" to version,
+                "name" to name,
+                "description" to description,
+                "fabricloader" to fabricloaderDependency,
+                "minecraft" to minecraftDependency,
+                "fabric_api" to fabricApiDependency,
+                "fabric_language_kotlin" to fabricLanguageKotlinDependency,
+                "carpet" to carpetDependency,
+            )
+        inputs.properties(replaceMap)
+        filesMatching("fabric.mod.json") {
+            expand(replaceMap)
+        }
+    }
+
+    tasks.matching { it.name == "jar" || it.name == "remapJar" }.configureEach {
+        val baseName = providers.gradleProperty("archives_base_name").get()
+        val fileName = "$baseName-v$version-mc$minecraftVersion.jar"
+        (this as AbstractArchiveTask).archiveFileName.set(fileName)
+    }
+
+    plugins.withId("java") {
+        tasks.withType<JavaCompile>().configureEach {
+            options.release.set(25)
+            options.encoding = "UTF-8"
+        }
+    }
+
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        tasks.withType<KotlinCompile>().configureEach {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_25)
+            }
+        }
+        extensions.configure<KotlinJvmProjectExtension>("kotlin") {
+            jvmToolchain(25)
+        }
     }
 }
 

@@ -1,7 +1,3 @@
-import net.fabricmc.loom.task.RemapJarTask
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     alias(libs.plugins.loomOld)
     alias(libs.plugins.kotlin.jvm)
@@ -30,56 +26,6 @@ dependencies {
     implementation(libs.gson)
     include(libs.snakeyaml)
     include(libs.gson)
-}
-
-tasks.named<ProcessResources>("processResources") {
-    val name = providers.gradleProperty("mod_name").get()
-    val description = providers.gradleProperty("mod_description").get()
-    val fabricloaderDependency = providers.gradleProperty("fabricloader_dependency").get()
-    val minecraftDependency = cfg.getString("dependency.minecraft")
-    val fabricApiDependency = cfg.getString("dependency.fabric-api")
-    val fabricLanguageKotlinDependency = providers.gradleProperty("fabric_language_kotlin_dependency").get()
-    val carpetDependency = cfg.getString("dependency.carpet")
-    val replaceMap =
-        mapOf(
-            "version" to version,
-            "name" to name,
-            "description" to description,
-            "fabricloader" to fabricloaderDependency,
-            "minecraft" to minecraftDependency,
-            "fabric_api" to fabricApiDependency,
-            "fabric_language_kotlin" to fabricLanguageKotlinDependency,
-            "carpet" to carpetDependency,
-        )
-    inputs.properties(replaceMap)
-    filesMatching("fabric.mod.json") {
-        expand(replaceMap)
-    }
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.release.set(21)
-    options.encoding = "UTF-8"
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
-    }
-}
-
-tasks.named<RemapJarTask>("remapJar") {
-    val baseName = providers.gradleProperty("archives_base_name").get()
-    val fileName = "$baseName-v$version-mc$minecraftVersion.jar"
-    archiveFileName.set(fileName)
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-}
-
-kotlin {
-    jvmToolchain(21)
 }
 
 sourceSets {
