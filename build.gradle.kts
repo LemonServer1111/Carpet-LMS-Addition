@@ -106,10 +106,12 @@ subprojects {
 }
 
 spotless {
+    val licenseHeaderFile = rootProject.file("copyright.txt")
     kotlin {
         target("**/*.kt")
         targetExclude("**/build/**", "**/.gradle/**")
         ktlint(libs.versions.ktlint.get())
+        licenseHeaderFile(licenseHeaderFile)
     }
     kotlinGradle {
         target("**/*.gradle.kts")
@@ -127,6 +129,7 @@ spotless {
             .reflowLongStrings()
             .formatJavadoc(false)
             .reorderImports(true)
+        licenseHeaderFile(licenseHeaderFile)
     }
     format("styling") {
         target("**/*.md", "**/*.json", "**/*.yaml", "**/*.yml", "**/*.toml")

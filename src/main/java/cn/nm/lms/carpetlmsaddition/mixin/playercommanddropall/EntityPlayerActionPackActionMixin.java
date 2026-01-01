@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2025  Carpet-LMS-Addition contributors
+ * https://github.com/Citrus-Union/Carpet-LMS-Addition
+
+ * Carpet LMS Addition is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3 of the License.
+
+ * Carpet LMS Addition is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with Carpet LMS Addition.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package cn.nm.lms.carpetlmsaddition.mixin.playercommanddropall;
 
 import carpet.fakes.ServerPlayerInterface;
@@ -15,13 +31,15 @@ import org.spongepowered.asm.mixin.injection.At;
 public class EntityPlayerActionPackActionMixin implements DropAllActionExtension {
   @Unique private boolean lms$dropAll;
 
+  @Override
   @Unique
-  public void setDropAll(boolean v) {
+  public void lms$setDropAll(boolean v) {
     this.lms$dropAll = v;
   }
 
+  @Override
   @Unique
-  public boolean isDropAll() {
+  public boolean lms$isDropAll() {
     return this.lms$dropAll;
   }
 
@@ -39,7 +57,7 @@ public class EntityPlayerActionPackActionMixin implements DropAllActionExtension
       EntityPlayerActionPack.Action action,
       Operation<Boolean> original,
       EntityPlayerActionPack pack) {
-    if (type == EntityPlayerActionPack.ActionType.DROP_STACK && isDropAll()) {
+    if (type == EntityPlayerActionPack.ActionType.DROP_STACK && lms$isDropAll()) {
       if (!CommandHelper.canUseCommand(
           player.createCommandSourceStack(), PlayerCommandDropall.playerCommandDropall)) {
         return false;
