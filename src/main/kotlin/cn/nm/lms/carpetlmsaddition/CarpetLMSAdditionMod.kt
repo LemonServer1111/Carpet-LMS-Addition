@@ -57,5 +57,5 @@ object CarpetLMSAdditionMod : ModInitializer, CarpetExtension {
         RulesBootstrap.registerAll()
     }
 
-    override fun canHasTranslations(lang: String): Map<String, String> = CarpetLMSAdditionTranslations.getTranslation(lang)
+    override fun canHasTranslations(lang: String): Map<String, String> = CarpetLMSAdditionTranslations.translations(lang)
 }

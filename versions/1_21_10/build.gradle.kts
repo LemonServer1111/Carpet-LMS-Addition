@@ -24,9 +24,7 @@ dependencies {
     modImplementation("$fabricApiModule:$fabricApiVersion")
     modImplementation(libs.fabricKotlin)
     modImplementation("$carpetModule:$carpetVersion")
-    implementation(libs.snakeyaml)
     implementation(libs.gson)
-    include(libs.snakeyaml)
     include(libs.gson)
 }
 

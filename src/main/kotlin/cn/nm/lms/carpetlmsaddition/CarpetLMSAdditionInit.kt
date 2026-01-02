@@ -21,6 +21,7 @@ import cn.nm.lms.carpetlmsaddition.rules.lowhealthspectator.LowHealthSpectatorCo
 
 object CarpetLMSAdditionInit {
     fun initAll() {
+        CarpetLMSAdditionTranslations.loadTranslations()
         CarpetLMSAdditionRecipes.register()
         CommandLMS.register()
         LowHealthSpectatorController.init()

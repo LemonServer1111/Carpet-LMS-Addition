@@ -12,6 +12,7 @@ buildscript {
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.spotless)
+    alias(libs.plugins.yamlang)
 }
 
 allprojects {
@@ -25,6 +26,9 @@ allprojects {
 }
 
 subprojects {
+    pluginManager.apply("me.fallenbreath.yamlang")
+    pluginManager.apply("java")
+
     val cfgFile = file("version.toml")
 
     val cfg = Toml.parse(cfgFile.readText())!!
@@ -102,6 +106,18 @@ subprojects {
         extensions.configure<KotlinJvmProjectExtension>("kotlin") {
             jvmToolchain(25)
         }
+    }
+
+    yamlang {
+        val sourceSets = extensions.getByType<SourceSetContainer>()
+        targetSourceSets.set(
+            listOf(sourceSets.named("main").get()),
+        )
+        inputDir.set("assets/carpetlmsaddition/lang")
+    }
+
+    tasks.matching { it.name.contains("run") }.configureEach {
+        dependsOn("classes")
     }
 }
 

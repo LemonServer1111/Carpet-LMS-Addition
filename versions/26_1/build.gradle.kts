@@ -23,9 +23,7 @@ dependencies {
     implementation("$fabricApiModule:$fabricApiVersion")
     implementation(libs.fabricKotlin)
     implementation("$carpetModule:$carpetVersion")
-    implementation(libs.snakeyaml)
     implementation(libs.gson)
-    include(libs.snakeyaml)
     include(libs.gson)
 }
 

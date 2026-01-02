@@ -16,93 +16,71 @@
  */
 package cn.nm.lms.carpetlmsaddition
 
-/*
-TODO: Rewrite this file
- */
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.yaml.snakeyaml.LoaderOptions
-import org.yaml.snakeyaml.Yaml
-import org.yaml.snakeyaml.constructor.SafeConstructor
-import java.io.InputStream
+import com.google.gson.Gson
+import net.fabricmc.loader.api.FabricLoader
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.util.Collections
-import java.util.concurrent.ConcurrentHashMap
 
 object CarpetLMSAdditionTranslations {
-    private val LOGGER: Logger =
-        LoggerFactory.getLogger(CarpetLMSAdditionTranslations::class.java)
+    private val translationStorage: MutableMap<String, MutableMap<String, String>> = linkedMapOf()
 
-    private val YAML: Yaml =
-        Yaml(SafeConstructor(LoaderOptions()))
+    private const val DEFAULT_LANG = "en_us"
+    private const val RESOURCE_DIR = "assets/carpetlmsaddition/lang"
+    private val gson = Gson()
 
-    private val CACHE: MutableMap<String, Map<String, String>> =
-        ConcurrentHashMap()
-
-    fun getTranslation(lang: String): Map<String, String> = CACHE.computeIfAbsent(lang) { loadTranslation(it) }
-
-    private fun loadTranslation(lang: String): Map<String, String> {
-        val path = "assets/carpetlmsaddition/lang/%s.yml".format(lang)
-
-        try {
-            val stream: InputStream? =
-                CarpetLMSAdditionTranslations::class.java.classLoader.getResourceAsStream(path)
-
-            val reader: InputStreamReader? =
-                if (stream == null) {
-                    null
-                } else {
-                    InputStreamReader(stream, StandardCharsets.UTF_8)
-                }
-
-            reader.use {
-                if (it == null) {
-                    return Collections.emptyMap()
-                }
-
-                val data: Any? = YAML.load(it)
-                if (data !is Map<*, *>) {
-                    return Collections.emptyMap()
-                }
-
-                val flat: MutableMap<String, String> = HashMap()
-                flatten(data, "", flat)
-                return flat
+    fun loadTranslations() {
+        val languages: List<String> =
+            try {
+                readJson("$RESOURCE_DIR/meta/languages.json")
+            } catch (e: Exception) {
+                CarpetLMSAdditionMod.LOGGER.error("Failed to read language list", e)
+                return
             }
-        } catch (e: Exception) {
-            LOGGER.warn("Failed to load translations for {}", lang, e)
-            return Collections.emptyMap()
+
+        for (lang in languages) {
+            translationStorage.computeIfAbsent(lang) {
+                loadTranslationFile(lang).toMutableMap()
+            }
         }
     }
 
-    private fun flatten(
-        node: Any?,
-        prefix: String,
-        out: MutableMap<String, String>,
-    ) {
-        if (node is Map<*, *>) {
-            for ((k, v) in node) {
-                val key = k as? String ?: continue
-                val childPrefix =
-                    if (prefix.isEmpty()) key else "$prefix.$key"
-                flatten(v, childPrefix, out)
+    private fun loadTranslationFile(lang: String): Map<String, String> =
+        try {
+            readJson("$RESOURCE_DIR/$lang.json")
+        } catch (e: Exception) {
+            val msg = "Failed to load translation of language $lang"
+            CarpetLMSAdditionMod.LOGGER.error(msg, e)
+            if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+                throw RuntimeException(msg, e)
             }
-            return
+            Collections.emptyMap()
         }
 
-        if (node is List<*>) {
-            for (i in node.indices) {
-                val childPrefix =
-                    if (prefix.isEmpty()) i.toString() else "$prefix.$i"
-                flatten(node[i], childPrefix, out)
-            }
-            return
+    private fun getTranslations(lang: String): Map<String, String> = translationStorage[lang] ?: emptyMap()
+
+    fun translations(lang: String): Map<String, String> {
+        val result = HashMap<String, String>()
+
+        // fallback
+        result.putAll(getTranslations(DEFAULT_LANG))
+
+        if (lang != DEFAULT_LANG) {
+            result.putAll(getTranslations(lang))
         }
 
-        if (prefix.isNotEmpty() && node != null) {
-            out[prefix] = node.toString()
+        return result
+    }
+
+    private inline fun <reified T> readJson(path: String): T {
+        val stream =
+            javaClass.classLoader.getResourceAsStream(path)
+                ?: throw IllegalStateException("Missing resource: $path")
+
+        stream.use {
+            InputStreamReader(it, StandardCharsets.UTF_8).use { reader ->
+                return gson.fromJson(reader, T::class.java)
+            }
         }
     }
 }
