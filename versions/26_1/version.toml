@@ -1,9 +1,0 @@
-[versions]
-minecraft = "26.1-snapshot-1"
-fabric-api = "0.140.2+26.1"
-carpet = "26.1-beta-1"
-
-[dependency]
-minecraft = ">26.0"
-fabric-api = "*"
-carpet = "*"

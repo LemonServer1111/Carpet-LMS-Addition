@@ -1,29 +1,5 @@
 [versions]
-kotlin = "2.3.0"
-loom = "1.14-SNAPSHOT"
-gson = "2.13.2"
-yamlang = "1.5.0"
-tomlj = "1.1.1"
-spotless = "8.1.0"
 prettier = "3.7.4"
 prettierPluginToml = "2.0.6"
 googleJavaFormat = "1.33.0"
 ktlint = "1.8.0"
-fabricLoader = "0.18.4"
-fabricKotlin = "1.13.8+kotlin.2.3.0"
-
-[plugins]
-loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }
-loomOld = { id = "fabric-loom", version.ref = "loom" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-yamlang = { id = "me.fallenbreath.yamlang", version.ref = "yamlang" }
-
-[libraries]
-minecraft = { module = "com.mojang:minecraft" }
-fabricLoader = { module = "net.fabricmc:fabric-loader", version.ref = "fabricLoader" }
-fabricApi = { module = "net.fabricmc.fabric-api:fabric-api" }
-fabricKotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabricKotlin" }
-carpet = { module = "maven.modrinth:carpet" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-tomlj = { module = "org.tomlj:tomlj", version.ref = "tomlj" }

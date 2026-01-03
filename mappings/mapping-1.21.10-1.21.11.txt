@@ -1,0 +1,2 @@
+net.minecraft.resources.ResourceLocation net.minecraft.resources.Identifier
+net.minecraft.world.entity.projectile.ThrownEnderpearl net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEnderpearl

@@ -1,134 +1,76 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.tomlj.Toml
-
-buildscript {
-    dependencies {
-        classpath(libs.tomlj)
-    }
-}
+import org.gradle.api.Project
+import org.gradle.api.file.DuplicatesStrategy
+import java.nio.file.Path
 
 plugins {
-    alias(libs.plugins.kotlin.jvm) apply false
-    alias(libs.plugins.spotless)
-    alias(libs.plugins.yamlang)
+    `maven-publish`
+    id("net.fabricmc.fabric-loom") version "1.14-SNAPSHOT" apply false
+    id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT" apply false
+
+    // https://github.com/ReplayMod/preprocessor
+    // https://github.com/Fallen-Breath/preprocessor
+    id("com.replaymod.preprocess") version "c5abb4fb12"
+
+    // https://github.com/Fallen-Breath/yamlang
+    id("me.fallenbreath.yamlang") version "1.5.0" apply false
+    id("com.diffplug.spotless") version "8.1.0"
 }
 
-allprojects {
-    group = providers.gradleProperty("maven_group").get()
-    version = providers.gradleProperty("mod_version").get()
+repositories {
 
-    repositories {
-        maven("https://api.modrinth.com/maven")
-        mavenCentral()
+    mavenCentral()
+}
+
+val rootProjectRef: Project = project
+
+preprocess {
+    strictExtraMappings = false
+
+    val mc12110 = createNode("1.21.10", 1_21_10, "")
+    val mc12111 = createNode("1.21.11", 1_21_11, "")
+    val mc260100 = createNode("26.1", 26_01_00, "")
+
+    mc12110.link(mc12111, file("mappings/mapping-1.21.10-1.21.11.txt"))
+    mc12111.link(mc260100, file("mappings/mapping-1.21.11-26.1.txt"))
+
+    // See https://github.com/Fallen-Breath/fabric-mod-template/blob/1d72d77a1c5ce0bf060c2501270298a12adab679/build.gradle#L55-L63
+    for (node in getNodes()) {
+        val nodeProject =
+            requireNotNull(rootProjectRef.findProject(node.project)) {
+                "Project ${node.project} not found"
+            }
+        nodeProject.extensions.extraProperties["mcVersion"] = node.mcVersion
     }
 }
 
-subprojects {
-    pluginManager.apply("me.fallenbreath.yamlang")
-    pluginManager.apply("java")
-
-    val cfgFile = file("version.toml")
-
-    val cfg = Toml.parse(cfgFile.readText())!!
-    val minecraftVersion = cfg.getString("versions.minecraft")
-
-    tasks.withType<ProcessResources>().configureEach {
-        val name = providers.gradleProperty("mod_name").get()
-        val description = providers.gradleProperty("mod_description").get()
-        val source = providers.gradleProperty("mod_source").get()
-        val fabricloaderDependency = providers.gradleProperty("fabricloader_dependency").get()
-        val minecraftDependency = cfg.getString("dependency.minecraft")
-        val fabricApiDependency = cfg.getString("dependency.fabric-api")
-        val fabricLanguageKotlinDependency =
-            providers.gradleProperty("fabric_language_kotlin_dependency").get()
-        val carpetDependency = cfg.getString("dependency.carpet")
-        val replaceMap =
-            mapOf(
-                "version" to version,
-                "name" to name,
-                "description" to description,
-                "fabricloader" to fabricloaderDependency,
-                "minecraft" to minecraftDependency,
-                "fabric_api" to fabricApiDependency,
-                "fabric_language_kotlin" to fabricLanguageKotlinDependency,
-                "carpet" to carpetDependency,
-                "source" to source,
-            )
-        inputs.properties(replaceMap)
-        filesMatching("fabric.mod.json") {
-            expand(replaceMap)
+tasks.register("buildAndGather") {
+    group = "build"
+    dependsOn(project.subprojects.map { it.tasks.named("build") })
+    doFirst {
+        println("Gathering builds")
+        val buildLibs: (Project) -> Path = { p ->
+            p.layout.buildDirectory
+                .dir("libs")
+                .get()
+                .asFile
+                .toPath()
         }
-    }
-
-    tasks.matching { it.name == "jar" || it.name == "remapJar" }.configureEach {
-        val baseName = providers.gradleProperty("archives_base_name").get()
-        val fileName = "$baseName-v$version-mc$minecraftVersion.jar"
-        (this as AbstractArchiveTask).archiveFileName.set(fileName)
-    }
-
-    plugins.withId("java") {
-        tasks.withType<JavaCompile>().configureEach {
-            options.encoding = "UTF-8"
-            when {
-                project.name.startsWith("mc1_21") -> {
-                    options.release.set(21)
+        project.delete(project.fileTree(buildLibs(rootProject)) { include("*") })
+        project.subprojects.forEach { subproject ->
+            project.copy {
+                from(buildLibs(subproject)) {
+                    include("*.jar")
+                    exclude("*-dev.jar", "*-sources.jar", "*-shadow.jar")
                 }
-
-                else -> {
-                    options.release.set(25)
-                }
+                into(buildLibs(rootProject))
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
             }
         }
-        extensions.configure<JavaPluginExtension>("java") {
-            toolchain {
-                languageVersion.set(JavaLanguageVersion.of(25))
-                vendor.set(JvmVendorSpec.AZUL)
-            }
-        }
-    }
-
-    plugins.withId("org.jetbrains.kotlin.jvm") {
-        tasks.withType<KotlinCompile>().configureEach {
-            compilerOptions {
-                when {
-                    project.name.startsWith("mc1_21") -> {
-                        jvmTarget.set(JvmTarget.JVM_21)
-                    }
-
-                    else -> {
-                        jvmTarget.set(JvmTarget.JVM_25)
-                    }
-                }
-            }
-        }
-        extensions.configure<KotlinJvmProjectExtension>("kotlin") {
-            jvmToolchain(25)
-        }
-    }
-
-    yamlang {
-        val sourceSets = extensions.getByType<SourceSetContainer>()
-        targetSourceSets.set(
-            listOf(sourceSets.named("main").get()),
-        )
-        inputDir.set("assets/carpetlmsaddition/lang")
-    }
-
-    tasks.matching { it.name.contains("run") }.configureEach {
-        dependsOn("classes")
     }
 }
 
 spotless {
     val licenseHeaderFile = rootProject.file("copyright.txt")
-    kotlin {
-        target("**/*.kt")
-        targetExclude("**/build/**", "**/.gradle/**")
-        ktlint(libs.versions.ktlint.get())
-        licenseHeaderFile(licenseHeaderFile)
-    }
     kotlinGradle {
         target("**/*.gradle.kts")
         targetExclude("**/build/**", "**/.gradle/**")
@@ -161,21 +103,10 @@ spotless {
             ),
         )
     }
-}
-
-tasks.register<Copy>("mergeLibs") {
-    group = "build"
-    subprojects.forEach { sub ->
-        dependsOn(
-            sub.tasks.matching {
-                it.name == "jar" || it.name == "remapJar"
-            },
-        )
-        from(sub.layout.buildDirectory.dir("libs"))
+    format("text") {
+        target("**/*.properties", "**/*.txt")
+        targetExclude("**/build/**", "**/.gradle/**", "**/run/**")
+        trimTrailingWhitespace()
+        endWithNewline()
     }
-    into(layout.buildDirectory.dir("libs"))
-}
-
-tasks.build {
-    finalizedBy("mergeLibs")
 }

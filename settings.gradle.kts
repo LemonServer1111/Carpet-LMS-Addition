@@ -1,22 +1,41 @@
+import groovy.json.JsonSlurper
+
 rootProject.name = "Carpet LMS Addition"
 
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/")
+        maven {
+            name = "Fabric"
+            url = uri("https://maven.fabricmc.net/")
+        }
+        maven {
+            name = "Jitpack"
+            url = uri("https://jitpack.io")
+            @Suppress("UnstableApiUsage")
+            content { includeGroupAndSubgroups("com.github") }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
+    resolutionStrategy {
+        eachPlugin {
+            when (requested.id.id) {
+                "com.replaymod.preprocess" -> {
+                    useModule("com.github.Fallen-Breath:preprocessor:${requested.version}")
+                }
+            }
+        }
+    }
 }
 
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-}
+val settingsJson = file("settings.json").readText()
+val settings = JsonSlurper().parseText(settingsJson) as Map<*, *>
+val versions = settings["versions"] as List<*>
+for (versionAny in versions) {
+    val version = versionAny.toString()
+    include(":$version")
 
-listOf(
-    "1_21_10",
-    "1_21_11",
-    "26_1",
-).forEach {
-    include("mc$it")
-    project(":mc$it").projectDir = file("versions/$it")
+    val proj = project(":$version")
+    proj.projectDir = file("versions/$version")
+    proj.buildFileName = "../../common.gradle.kts"
 }

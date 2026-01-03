@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "carpet-lms-addition",
+  "id": "${id}",
   "version": "${version}",
   "name": "${name}",
   "description": "${description}",
@@ -12,20 +12,14 @@
   "icon": "assets/carpetlmsaddition/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      {
-        "value": "cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionMod",
-        "adapter": "kotlin"
-      }
-    ]
+    "main": ["cn.nm.lms.carpetlmsaddition.CarpetLMSAdditionMod"]
   },
   "mixins": ["carpet-lms-addition.mixins.json"],
   "depends": {
-    "fabricloader": "${fabricloader}",
-    "minecraft": "${minecraft}",
-    "fabric-api": "${fabric_api}",
-    "fabric-language-kotlin": "${fabric_language_kotlin}",
-    "carpet": "${carpet}"
+    "fabricloader": "${fabricloader_dependency}",
+    "minecraft": "${minecraft_dependency}",
+    "fabric-api": "*",
+    "carpet": "*"
   },
   "custom": {
     "modmenu": {

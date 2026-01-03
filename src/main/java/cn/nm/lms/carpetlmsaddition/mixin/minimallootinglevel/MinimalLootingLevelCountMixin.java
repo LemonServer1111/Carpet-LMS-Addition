@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EnchantedCountIncreaseFunction.class)
 public abstract class MinimalLootingLevelCountMixin {
   @Shadow @Final private Holder<Enchantment> enchantment;
-  @Shadow @Final private NumberProvider value;
+  @Shadow @Final private NumberProvider count;
   @Shadow @Final private int limit;
 
   @ModifyReturnValue(
@@ -46,7 +46,7 @@ public abstract class MinimalLootingLevelCountMixin {
       return result;
     }
 
-    float multiplier = value.getFloat(context);
+    float multiplier = this.count.getFloat(context);
     int effectiveLevel = MinimalLootingLevelLib.effectiveLootingLevel(level);
     int bonus = Math.round(effectiveLevel * multiplier);
     result.setCount(stack.getCount() + bonus);
