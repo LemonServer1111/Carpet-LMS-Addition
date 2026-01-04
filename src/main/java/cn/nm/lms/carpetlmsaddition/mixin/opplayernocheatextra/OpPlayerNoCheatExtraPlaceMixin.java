@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Carpet LMS Addition.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cn.nm.lms.carpetlmsaddition.mixin;
+package cn.nm.lms.carpetlmsaddition.mixin.opplayernocheatextra;
 
 import cn.nm.lms.carpetlmsaddition.rules.opplayernocheatextra.OpPlayerNoCheatExtraHelper;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -23,25 +23,12 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import java.util.function.Predicate;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.commands.ClearInventoryCommands;
-import net.minecraft.server.commands.DamageCommand;
-import net.minecraft.server.commands.FillBiomeCommand;
-import net.minecraft.server.commands.ForceLoadCommand;
 import net.minecraft.server.commands.PlaceCommand;
-import net.minecraft.server.commands.SetSpawnCommand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(
-    value = {
-      ClearInventoryCommands.class,
-      DamageCommand.class,
-      FillBiomeCommand.class,
-      ForceLoadCommand.class,
-      PlaceCommand.class,
-      SetSpawnCommand.class // /spawnpoint
-    })
-public abstract class OpPlayerNoCheatExtraMixin {
+@Mixin(PlaceCommand.class)
+public abstract class OpPlayerNoCheatExtraPlaceMixin {
   @WrapOperation(
       method = "register",
       at =

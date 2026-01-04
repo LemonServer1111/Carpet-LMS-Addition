@@ -10,7 +10,12 @@
     "ZombifiedPiglinSpawnFixMixin",
     "minimallootinglevel.MinimalLootingLevelChanceMixin",
     "minimallootinglevel.MinimalLootingLevelCountMixin",
-    "OpPlayerNoCheatExtraMixin",
+    "opplayernocheatextra.OpPlayerNoCheatExtraClearMixin",
+    "opplayernocheatextra.OpPlayerNoCheatExtraDamageMixin",
+    "opplayernocheatextra.OpPlayerNoCheatExtraFillBiomeMixin",
+    "opplayernocheatextra.OpPlayerNoCheatExtraForceLoadMixin",
+    "opplayernocheatextra.OpPlayerNoCheatExtraPlaceMixin",
+    "opplayernocheatextra.OpPlayerNoCheatExtraSpawnpointMixin",
     "playercommanddropall.EntityPlayerActionPackActionMixin",
     "playercommanddropall.PlayerCommandDropAllMixin"
   ],
