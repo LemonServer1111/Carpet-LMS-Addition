@@ -2,12 +2,6 @@ name: Dev Builds
 
 on:
   push:
-    paths:
-      - "*.gradle"
-      - "gradle.properties"
-      - "src/**"
-      - "versions/**"
-      - ".github/**"
   pull_request:
 
 permissions:
