@@ -12,7 +12,6 @@ on:
         type: string
         required: false
         default: ""
-      # [FEATURE] MIXIN_AUDITOR
       mixin_audit:
         description: run mixin audit for Minecraft after build
         type: boolean
@@ -54,7 +53,6 @@ jobs:
           BUILD_ID: ${{ github.run_number }}
           BUILD_RELEASE: ${{ inputs.release }}
 
-      # [FEATURE] MIXIN_AUDITOR
       - name: Run mixin audit check for Minecraft client
         if: ${{ inputs.mixin_audit }}
         timeout-minutes: 10
@@ -85,22 +83,23 @@ jobs:
           name: mod-jars
           path: mod-jars/*.jar
 
-  #      # [FEATURE] FALLENS_MAVEN
-  #      - name: Publish with gradle
-  #        if: inputs.release || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
-  #        run: |
-  #          if [ -z "${{ inputs.target_subproject }}" ]; then
-  #              echo "Publishing all subprojects"
-  #              ./gradlew publish
-  #          else
-  #              args=$(echo "${{ inputs.target_subproject }}" | tr ',' '\n' | sed 's/$/:publish/' | paste -sd ' ')
-  #              echo "Publishing with arguments=$args"
-  #              ./gradlew $args
-  #          fi
-  #        env:
-  #          BUILD_ID: ${{ github.run_number }}
-  #          BUILD_RELEASE: ${{ inputs.release }}
-  #          FALLENS_MAVEN_TOKEN: ${{ secrets.FALLENS_MAVEN_TOKEN }}
+      - name: Publish with gradle
+        if: inputs.release || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+        run: |
+          if [ -z "${{ inputs.target_subproject }}" ]; then
+              echo "Publishing all subprojects"
+              ./gradlew publish
+          else
+              args=$(echo "${{ inputs.target_subproject }}" | tr ',' '\n' | sed 's/$/:publish/' | paste -sd ' ')
+              echo "Publishing with arguments=$args"
+              ./gradlew $args
+          fi
+        env:
+          BUILD_ID: ${{ github.run_number }}
+          BUILD_RELEASE: ${{ inputs.release }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY_ASC }}
 
   summary:
     runs-on: ubuntu-latest

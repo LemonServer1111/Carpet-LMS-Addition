@@ -1,22 +1,13 @@
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
-import org.gradle.api.JavaVersion
-import org.gradle.api.artifacts.Dependency
-import org.gradle.api.artifacts.ModuleDependency
-import org.gradle.api.plugins.BasePluginExtension
-import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.tasks.SourceSetContainer
-import org.gradle.api.tasks.bundling.Jar
-import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.language.jvm.tasks.ProcessResources
-import java.io.File
 
 val mcVersion = (project.extra["mcVersion"] as Number).toInt()
 val unobfuscated = mcVersion >= 26_00_00
 
-apply(plugin = "maven-publish")
 apply(plugin = if (unobfuscated) "net.fabricmc.fabric-loom" else "net.fabricmc.fabric-loom-remap")
 apply(plugin = "com.replaymod.preprocess")
 apply(plugin = "me.fallenbreath.yamlang")
+apply(plugin = "com.vanniktech.maven.publish")
 
 val minecraftVersion: String by project
 val parchmentVersion: String by project
@@ -95,7 +86,6 @@ dependencies {
 //  if (mcVersion < 11904) {
 //      autoRuntimeOnly(mcVersion < 11900 ? "com.github.astei:lazydfu:0.1.2" : "com.github.Fallen-Breath:lazydfu:a7cfc44c0c")
 //  }
-    // [FEATURE] MIXIN_AUDITOR
     autoRuntimeOnly("me.fallenbreath:mixin-auditor:0.2.0-${if (unobfuscated) "u" else "o"}")
 
     // dependencies
@@ -137,7 +127,6 @@ loomExtension.runConfigs.configureEach {
     setRunDir("../../run")
     vmArgs(commonVmArgs)
 }
-// [FEATURE] MIXIN_AUDITOR
 loomExtension.runs {
     val auditVmArgs = commonVmArgs + "-DmixinAuditor.audit=true"
     register("serverMixinAudit") {
@@ -266,5 +255,41 @@ tasks.named<Jar>("jar") {
     inputs.property("archives_base_name", archivesBaseName)
     from(rootProject.file("LICENSE")) {
         rename { name -> "${name}_${inputs.properties["archives_base_name"]}" }
+    }
+}
+
+extensions.configure<MavenPublishBaseExtension>("mavenPublishing") {
+    publishToMavenCentral(automaticRelease = true)
+    signAllPublications()
+    coordinates(
+        groupId = group.toString(),
+        artifactId = baseExtension.archivesName.get(),
+        version = fullArtifactVersion,
+    )
+
+    pom {
+        name.set(modName)
+        description.set(modDescription)
+        url.set(modSource)
+        licenses {
+            license {
+                name.set("The GNU General Public License v3.0")
+                url.set("https://www.gnu.org/licenses/gpl-3.0.html")
+            }
+        }
+        developers {
+            developer {
+                id.set("jasonxue1")
+                name.set("jasonxue")
+            }
+            developer {
+                id.set("LittleLemonJam")
+                name.set("小柠檬lemon酱")
+            }
+        }
+        scm {
+            url.set("https://github.com/Citrus-Union/Carpet-LMS-Addition")
+            connection.set("scm:git:https://github.com/Citrus-Union/Carpet-LMS-Addition.git")
+        }
     }
 }

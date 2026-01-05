@@ -4,6 +4,7 @@ import java.nio.file.Path
 
 plugins {
     `maven-publish`
+    `signing`
     id("net.fabricmc.fabric-loom") version "1.14-SNAPSHOT" apply false
     id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT" apply false
 
@@ -14,10 +15,10 @@ plugins {
     // https://github.com/Fallen-Breath/yamlang
     id("me.fallenbreath.yamlang") version "1.5.0" apply false
     id("com.diffplug.spotless") version "8.1.0"
+    id("com.vanniktech.maven.publish") version "0.35.0"
 }
 
 repositories {
-
     mavenCentral()
 }
 
@@ -85,7 +86,7 @@ spotless {
         cleanthat()
         googleJavaFormat(libs.versions.googleJavaFormat.get())
             .reflowLongStrings()
-            .formatJavadoc(false)
+            .formatJavadoc(true)
             .reorderImports(true)
         licenseHeaderFile(licenseHeaderFile)
     }
