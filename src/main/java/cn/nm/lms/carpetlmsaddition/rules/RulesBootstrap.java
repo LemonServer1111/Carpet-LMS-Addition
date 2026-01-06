@@ -50,6 +50,7 @@ public final class RulesBootstrap {
           OpPlayerNoCheatExtra.class,
           PearlIgnoreEntityCollision.class,
           PlayerCommandDropall.class,
+          ShulkerDuplicateLowHealthFailureChance.class,
           ShulkerDuplicateNearbyLimit.class,
           SoftVault.class,
           SpongeRecipe.class,

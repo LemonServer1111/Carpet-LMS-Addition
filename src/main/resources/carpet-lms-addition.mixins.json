@@ -6,6 +6,7 @@
     "AllayHealIntervalMixin",
     "FragileVaultMixin",
     "PearlIgnoreEntityCollisionMixin",
+    "ShulkerDuplicateLowHealthFailureChanceMixin",
     "ShulkerDuplicateNearbyLimitMixin",
     "SoftVaultMixin",
     "VaultMaxBlacklistSizeMixin",

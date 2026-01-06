@@ -16,17 +16,17 @@
  */
 package cn.nm.lms.carpetlmsaddition.mixin;
 
-import cn.nm.lms.carpetlmsaddition.rules.AllayHealInterval;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.world.entity.animal.allay.Allay;
+import cn.nm.lms.carpetlmsaddition.rules.ShulkerDuplicateLowHealthFailureChance;
+import net.minecraft.world.entity.monster.Shulker;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Mixin(Allay.class)
-public abstract class AllayHealIntervalMixin {
-  @ModifyExpressionValue(method = "aiStep", at = @At(value = "CONSTANT", args = "intValue=10"))
-  private int changeAllayHealInterval(int original) {
-    int interval = AllayHealInterval.allayHealInterval;
-    return interval == 0 ? Integer.MAX_VALUE : interval;
+@Mixin(Shulker.class)
+public abstract class ShulkerDuplicateLowHealthFailureChanceMixin {
+  @ModifyConstant(method = "hurtServer", constant = @Constant(intValue = 4))
+  private int changeBlacklistLimit(int original) {
+    int chance = ShulkerDuplicateLowHealthFailureChance.shulkerDuplicateLowHealthFailureChance;
+    return chance == 0 ? Integer.MAX_VALUE : chance;
   }
 }

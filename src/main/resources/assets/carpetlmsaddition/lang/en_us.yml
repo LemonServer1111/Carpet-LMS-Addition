@@ -43,6 +43,11 @@ carpet:
       desc: Ender pearls ignore collisions with entities
     playerCommandDropall:
       desc: Use "dropall" instead of "dropstack all"
+    shulkerDuplicateLowHealthFailureChance:
+      desc: Sets the failure chance of shulker duplication when below half health
+      extra:
+        "0": Failure chance = 1 / value
+        "1": 0 disables failure
     shulkerDuplicateNearbyLimit:
       desc: Sets the divisor used to reduce shulker duplication chance based on nearby count
       extra:

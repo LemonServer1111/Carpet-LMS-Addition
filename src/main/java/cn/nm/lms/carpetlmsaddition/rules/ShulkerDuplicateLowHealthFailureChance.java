@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Carpet LMS Addition.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cn.nm.lms.carpetlmsaddition.mixin;
+package cn.nm.lms.carpetlmsaddition.rules;
 
-import cn.nm.lms.carpetlmsaddition.rules.AllayHealInterval;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.world.entity.animal.allay.Allay;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+import carpet.api.settings.Rule;
+import carpet.api.settings.RuleCategory;
+import carpet.api.settings.Validators;
 
-@Mixin(Allay.class)
-public abstract class AllayHealIntervalMixin {
-  @ModifyExpressionValue(method = "aiStep", at = @At(value = "CONSTANT", args = "intValue=10"))
-  private int changeAllayHealInterval(int original) {
-    int interval = AllayHealInterval.allayHealInterval;
-    return interval == 0 ? Integer.MAX_VALUE : interval;
-  }
+public final class ShulkerDuplicateLowHealthFailureChance {
+  @Rule(
+      categories = {LMSRuleCategory.LMS, RuleCategory.SURVIVAL},
+      validators = {Validators.NonNegativeNumber.class})
+  public static int shulkerDuplicateLowHealthFailureChance = 4;
+
+  private ShulkerDuplicateLowHealthFailureChance() {}
 }
