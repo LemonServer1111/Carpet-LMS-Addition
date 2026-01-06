@@ -43,6 +43,10 @@ carpet:
       desc: Ender pearls ignore collisions with entities
     playerCommandDropall:
       desc: Use "dropall" instead of "dropstack all"
+    shulkerDuplicateNearbyLimit:
+      desc: Sets the divisor used to reduce shulker duplication chance based on nearby count
+      extra:
+        "0": Failure chance = (nearbyShulkersIncludingSelf - 1) / value
     softVault:
       desc: Set the hardness of vault to be the same as beacon
     spongeRecipe:
