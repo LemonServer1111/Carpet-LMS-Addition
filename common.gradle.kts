@@ -41,8 +41,8 @@ repositories {
         content { includeGroup("me.fallenbreath") }
     }
     maven {
-        url = uri("https://api.modrinth.com/maven")
-        content { includeGroup("maven.modrinth") }
+        url = uri("https://masa.dy.fi/maven")
+        content { includeGroup("carpet") }
     }
 }
 
@@ -79,7 +79,7 @@ dependencies {
     }
     autoImplementation("net.fabricmc:fabric-loader:$loaderVersion")
     autoImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-    autoImplementation("maven.modrinth:carpet:$carpetVersion")
+    autoImplementation("carpet:fabric-carpet:$carpetVersion")
 
     autoCompileOnly("org.jspecify:jspecify:1.0.0")
     // runtime mods
