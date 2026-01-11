@@ -41,6 +41,16 @@ carpet:
           /spawnpoint
     pearlIgnoreEntityCollision:
       desc: Ender pearls ignore collisions with entities
+    pearlNoTp:
+      desc: Prevent teleportation when an ender pearl with a specific custom name impacts
+      extra:
+        "0": If set to false, the rule is disabled
+        "1": >-
+          When set to true,
+          an ender pearl named "noTp" will not teleport the player on impact
+        "2": >-
+          If set to a different string,
+          an ender pearl named that string will not teleport the player on impact
     playerCommandDropall:
       desc: Use "dropall" instead of "dropstack all"
     shulkerDuplicateLowHealthFailureChance:

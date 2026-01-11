@@ -49,6 +49,7 @@ public final class RulesBootstrap {
           MinimalLootingLevel.class,
           OpPlayerNoCheatExtra.class,
           PearlIgnoreEntityCollision.class,
+          PearlNoTp.class,
           PlayerCommandDropall.class,
           ShulkerDuplicateLowHealthFailureChance.class,
           ShulkerDuplicateNearbyLimit.class,

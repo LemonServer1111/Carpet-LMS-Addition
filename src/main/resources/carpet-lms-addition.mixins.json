@@ -1,11 +1,12 @@
 {
   "required": true,
   "package": "cn.nm.lms.carpetlmsaddition.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
   "mixins": [
     "AllayHealIntervalMixin",
     "FragileVaultMixin",
     "PearlIgnoreEntityCollisionMixin",
+    "PearlNoTpMixin",
     "ShulkerDuplicateLowHealthFailureChanceMixin",
     "ShulkerDuplicateNearbyLimitMixin",
     "SoftVaultMixin",
