@@ -20,13 +20,22 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import cn.nm.lms.carpetlmsaddition.rules.AllayHealInterval;
 import net.minecraft.world.entity.animal.allay.Allay;
 
-@Mixin(Allay.class)
+import cn.nm.lms.carpetlmsaddition.rules.AllayHealInterval;
+
+@Mixin(
+    Allay.class
+)
 public abstract class AllayHealIntervalMixin
 {
-    @ModifyConstant(method = "aiStep", constant = @Constant(intValue = 10, ordinal = 0))
+    @ModifyConstant(
+            method = "aiStep",
+            constant = @Constant(
+                    intValue = 10,
+                    ordinal = 0
+            )
+    )
     private int changeAllayHealInterval(int original)
     {
         int interval = AllayHealInterval.allayHealInterval;

@@ -16,15 +16,18 @@
  */
 package cn.nm.lms.carpetlmsaddition.rules.lowhealthspectator;
 
+import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory;
+
 import carpet.api.settings.Rule;
 import carpet.api.settings.RuleCategory;
 import carpet.api.settings.Validators;
-import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory;
 
 public final class LowHealthSpectatorCooldown
 {
     @Rule(
-            categories = {LMSRuleCategory.LMS, RuleCategory.SURVIVAL}, validators = {Validators.NonNegativeNumber.class})
+            categories = {LMSRuleCategory.LMS, RuleCategory.SURVIVAL},
+            validators = {Validators.NonNegativeNumber.class}
+    )
     public static int lowHealthSpectatorCooldown = 200;
 
     private LowHealthSpectatorCooldown()

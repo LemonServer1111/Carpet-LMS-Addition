@@ -16,13 +16,16 @@
  */
 package cn.nm.lms.carpetlmsaddition.rules.elytrarecipe;
 
+import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory;
+
 import carpet.api.settings.Rule;
 import carpet.api.settings.RuleCategory;
-import cn.nm.lms.carpetlmsaddition.rules.LMSRuleCategory;
 
 public final class ElytraRecipe
 {
-    @Rule(categories = {LMSRuleCategory.LMS, RuleCategory.SURVIVAL})
+    @Rule(
+            categories = {LMSRuleCategory.LMS, RuleCategory.SURVIVAL}
+    )
     public static boolean elytraRecipe = false;
 
     private ElytraRecipe()

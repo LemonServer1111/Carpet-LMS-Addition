@@ -34,12 +34,18 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.phys.AABB;
 
-@Mixin(NetherPortalBlock.class)
+@Mixin(
+    NetherPortalBlock.class
+)
 public abstract class ZombifiedPiglinSpawnFixMixin
 {
     @Unique
     private static boolean passesNaturalCollisionChecks(
-                                                        EntityType<?> type, ServerLevel world, BlockPos spawnPos, EntitySpawnReason reason)
+            EntityType<?> type,
+            ServerLevel world,
+            BlockPos spawnPos,
+            EntitySpawnReason reason
+    )
     {
         double x = spawnPos.getX() + 0.5D;
         double y = spawnPos.getY();
@@ -59,10 +65,19 @@ public abstract class ZombifiedPiglinSpawnFixMixin
     }
 
     @WrapOperation(
-            method = "randomTick", at = @At(
-                    value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityType;spawn(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/EntitySpawnReason;)Lnet/minecraft/world/entity/Entity;"))
+            method = "randomTick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/EntityType;spawn" + "(Lnet/minecraft/server/level/ServerLevel;" + "Lnet/minecraft/core/BlockPos;" + "Lnet/minecraft/world/entity/EntitySpawnReason;)" + "Lnet/minecraft/world/entity/Entity;"
+            )
+    )
     private Entity onlyIfClear(
-                               EntityType<?> type, ServerLevel world, BlockPos spawnPos, EntitySpawnReason reason, Operation<Entity> origin)
+            EntityType<?> type,
+            ServerLevel world,
+            BlockPos spawnPos,
+            EntitySpawnReason reason,
+            Operation<Entity> origin
+    )
     {
         if (zombifiedPiglinSpawnFix && !passesNaturalCollisionChecks(type, world, spawnPos, reason))
         {
